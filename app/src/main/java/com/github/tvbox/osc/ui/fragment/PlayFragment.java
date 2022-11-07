@@ -308,6 +308,7 @@ public class PlayFragment extends BaseLazyFragment {
             }
         });
         danmakuContext = DanmakuContext.create();
+        mVideoView.setDanmuView(danmakuView);
     }
 
     void initVideoDurationSomeThing() {
