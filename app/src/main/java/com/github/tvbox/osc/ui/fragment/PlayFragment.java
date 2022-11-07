@@ -49,6 +49,7 @@ import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.bean.Subtitle;
 import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.cache.CacheManager;
+import com.github.tvbox.osc.danmu.BiliDanmukuParser;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.player.IjkMediaPlayer;
 import com.github.tvbox.osc.player.MyVideoView;
@@ -68,6 +69,8 @@ import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.VideoParseRuler;
 import com.github.tvbox.osc.util.XWalkUtils;
 import com.github.tvbox.osc.util.thunder.Thunder;
+import com.github.tvbox.osc.util.urlhttp.CallBackUtil;
+import com.github.tvbox.osc.util.urlhttp.UrlHttpUtil;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
@@ -90,6 +93,7 @@ import org.xwalk.core.XWalkWebResourceResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -99,7 +103,20 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterInputStream;
 
+import master.flame.danmaku.controller.DrawHandler;
+import master.flame.danmaku.controller.IDanmakuView;
+import master.flame.danmaku.danmaku.loader.ILoader;
+import master.flame.danmaku.danmaku.loader.IllegalDataException;
+import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
+import master.flame.danmaku.danmaku.model.BaseDanmaku;
+import master.flame.danmaku.danmaku.model.DanmakuTimer;
+import master.flame.danmaku.danmaku.model.android.DanmakuContext;
+import master.flame.danmaku.danmaku.model.android.Danmakus;
+import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
+import master.flame.danmaku.danmaku.parser.IDataSource;
 import me.jessyan.autosize.AutoSize;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkTimedText;
@@ -114,7 +131,11 @@ public class PlayFragment extends BaseLazyFragment {
     private VodController mController;
     private SourceViewModel sourceViewModel;
     private Handler mHandler;
+    private boolean showDanmaku;
 
+    private IDanmakuView danmakuView;
+
+    private DanmakuContext danmakuContext;
     private long videoDuration = -1;
 
     @Override
@@ -127,6 +148,33 @@ public class PlayFragment extends BaseLazyFragment {
         initView();
         initViewModel();
         initData();
+    }
+
+
+    /**
+     * 创建解析器，解析输入流
+     */
+    private BaseDanmakuParser createParser(InputStream stream) {
+        if (stream == null) {
+            return new BaseDanmakuParser() {
+                @Override
+                protected Danmakus parse() {
+                    return new Danmakus();
+                }
+            };
+        }
+        //A站是Json格式
+        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
+        try {
+            loader.load(stream);
+        } catch (IllegalDataException e) {
+            e.printStackTrace();
+        }
+        BaseDanmakuParser parser = new BiliDanmukuParser();
+        IDataSource<?> dataSource = loader.getDataSource();
+        parser.load(dataSource);
+        return parser;
+
     }
 
     private void initView() {
@@ -234,6 +282,32 @@ public class PlayFragment extends BaseLazyFragment {
             }
         });
         mVideoView.setVideoController(mController);
+
+        danmakuView = (IDanmakuView) findViewById(R.id.danmakuView);
+        danmakuView.enableDanmakuDrawingCache(true);
+        danmakuView.setCallback(new DrawHandler.Callback() {
+            @Override
+            public void prepared() {
+                showDanmaku = true;
+                danmakuView.start();
+            }
+
+            @Override
+            public void updateTimer(DanmakuTimer timer) {
+
+            }
+
+            @Override
+            public void danmakuShown(BaseDanmaku danmaku) {
+
+            }
+
+            @Override
+            public void drawingFinished() {
+
+            }
+        });
+        danmakuContext = DanmakuContext.create();
     }
 
     void initVideoDurationSomeThing() {
@@ -542,6 +616,23 @@ public class PlayFragment extends BaseLazyFragment {
                         }
                         mVideoView.start();
                         mController.resetSpeed();
+                        if (danmakuView != null) {
+                            danmakuView.release();
+                        }
+                        if ("bilidanmu".equalsIgnoreCase(mVodInfo.area)) {
+                            String u = mVodInfo.seriesMap.get("B站").get(0).url;
+                            String cid = u.split("_")[1];
+                            UrlHttpUtil.get("https://comment.bilibili.com/" + cid + ".xml", new CallBackUtil.CallBackStream() {
+                                @Override
+                                public void onFailure(int code, String errorMessage) {
+                                }
+
+                                @Override
+                                public void onResponse(InputStream response) {
+                                    danmakuView.prepare(createParser(new InflaterInputStream(response, new Inflater(true))), danmakuContext);
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -728,6 +819,9 @@ public class PlayFragment extends BaseLazyFragment {
         if (mVideoView != null) {
             mVideoView.pause();
         }
+        if(danmakuView != null){
+            danmakuView.pause();
+        }
     }
 
     @Override
@@ -735,6 +829,9 @@ public class PlayFragment extends BaseLazyFragment {
         super.onResume();
         if (mVideoView != null) {
             mVideoView.resume();
+        }
+        if (danmakuView != null){
+            danmakuView.resume();
         }
     }
 
@@ -744,9 +841,15 @@ public class PlayFragment extends BaseLazyFragment {
             if (mVideoView != null) {
                 mVideoView.pause();
             }
+            if(danmakuView != null){
+                danmakuView.pause();
+            }
         } else {
             if (mVideoView != null) {
                 mVideoView.resume();
+            }
+            if(danmakuView != null){
+                danmakuView.resume();
             }
         }
         super.onHiddenChanged(hidden);
@@ -758,6 +861,10 @@ public class PlayFragment extends BaseLazyFragment {
         if (mVideoView != null) {
             mVideoView.release();
             mVideoView = null;
+        }
+        if(danmakuView != null){
+            danmakuView.release();
+            danmakuView = null;
         }
         stopLoadWebView(true);
         stopParse();
