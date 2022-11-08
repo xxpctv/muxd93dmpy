@@ -289,12 +289,14 @@ public class PlayFragment extends BaseLazyFragment {
             @Override
             public void prepared() {
                 showDanmaku = true;
-                danmakuView.start();
+                danmakuView.start(mVideoView.getCurrentPosition());
             }
 
             @Override
             public void updateTimer(DanmakuTimer timer) {
-
+                if(Math.abs(danmakuView.getCurrentTime() - mVideoView.getCurrentPosition()) > 3 * 1000) {
+                    timer.update(mVideoView.getCurrentPosition());
+                }
             }
 
             @Override
