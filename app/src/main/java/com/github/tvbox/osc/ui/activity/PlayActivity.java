@@ -228,6 +228,11 @@ public class PlayActivity extends BaseActivity {
             }
 
             @Override
+            public void toggleDanmu() {
+
+            }
+
+            @Override
             public void prepared() {
                 initSubtitleView();
                 initVideoDurationSomeThing();

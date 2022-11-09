@@ -276,6 +276,16 @@ public class PlayFragment extends BaseLazyFragment {
             }
 
             @Override
+            public void toggleDanmu() {
+                if(danmakuView != null && danmakuView.isPrepared() && danmakuView.isShown()) {
+                    danmakuView.hide();
+                }else if(danmakuView != null && danmakuView.isPrepared() && !danmakuView.isShown()) {
+                    danmakuView.show();
+                }
+
+            }
+
+            @Override
             public void prepared() {
                 initSubtitleView();
                 initVideoDurationSomeThing();
