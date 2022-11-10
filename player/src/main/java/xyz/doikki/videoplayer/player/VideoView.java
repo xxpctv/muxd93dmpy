@@ -216,6 +216,9 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
         } else if (isInPlaybackState()) {
             startInPlaybackState();
         }
+        if (danmakuView != null && danmakuView.isPrepared()) {
+            this.danmakuView.start(mCurrentPosition);
+        }
     }
 
     /**
@@ -327,9 +330,7 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
             mAudioFocusHelper.requestFocus();
         }
         mPlayerContainer.setKeepScreenOn(true);
-        if (danmakuView != null && danmakuView.isPrepared() && danmakuView.isPaused()) {
-            this.danmakuView.resume();
-        }
+
     }
 
     /**
@@ -359,7 +360,7 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
                 && !mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();
             if (danmakuView != null && danmakuView.isPrepared() && danmakuView.isPaused()) {
-                this.danmakuView.pause();
+                this.danmakuView.resume();
             }
             setPlayState(STATE_PLAYING);
             if (mAudioFocusHelper != null && !isMute()) {
@@ -496,7 +497,6 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
         }
         if (danmakuView != null && danmakuView.isPrepared()) {
             this.danmakuView.seekTo(pos);
-            //
         }
     }
 
