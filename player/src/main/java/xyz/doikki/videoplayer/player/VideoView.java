@@ -216,9 +216,6 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
         } else if (isInPlaybackState()) {
             startInPlaybackState();
         }
-        if (danmakuView != null && danmakuView.isPrepared()) {
-            this.danmakuView.start(mCurrentPosition);
-        }
     }
 
     /**
@@ -495,9 +492,6 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
         if (isInPlaybackState()) {
             mMediaPlayer.seekTo(pos);
         }
-        if (danmakuView != null && danmakuView.isPrepared()) {
-            this.danmakuView.seekTo(pos);
-        }
     }
 
     /**
@@ -561,10 +555,16 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
                 break;
             case AbstractPlayer.MEDIA_INFO_BUFFERING_END:
                 setPlayState(STATE_BUFFERED);
+                if (danmakuView != null && danmakuView.isPrepared()) {
+                    this.danmakuView.seekTo(getCurrentPosition());
+                }
                 break;
             case AbstractPlayer.MEDIA_INFO_RENDERING_START: // 视频/音频开始渲染
                 setPlayState(STATE_PLAYING);
                 mPlayerContainer.setKeepScreenOn(true);
+                if (danmakuView != null && danmakuView.isPrepared()) {
+                    this.danmakuView.start(getCurrentPosition());
+                }
                 break;
             case AbstractPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED:
                 if (mRenderView != null) mRenderView.setVideoRotation(extra);

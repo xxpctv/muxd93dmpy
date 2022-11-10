@@ -298,8 +298,6 @@ public class PlayFragment extends BaseLazyFragment {
         danmakuView.setCallback(new DrawHandler.Callback() {
             @Override
             public void prepared() {
-                showDanmaku = true;
-                danmakuView.start(mVideoView.getCurrentPosition());
             }
 
             @Override
