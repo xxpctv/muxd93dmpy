@@ -496,6 +496,7 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
         }
         if (danmakuView != null && danmakuView.isPrepared()) {
             this.danmakuView.seekTo(pos);
+            //
         }
     }
 
