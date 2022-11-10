@@ -298,6 +298,8 @@ public class PlayFragment extends BaseLazyFragment {
         danmakuView.setCallback(new DrawHandler.Callback() {
             @Override
             public void prepared() {
+                showDanmaku = true;
+                danmakuView.start(mVideoView.getCurrentPosition());
             }
 
             @Override
@@ -319,6 +321,22 @@ public class PlayFragment extends BaseLazyFragment {
         });
         danmakuContext = DanmakuContext.create();
         mVideoView.setDanmuView(danmakuView);
+        //设置最大显示行数
+        HashMap<Integer, Integer> maxLInesPair = new HashMap<>(16);
+        maxLInesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 8);
+        //设置是否禁止重叠
+        HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<>(16);
+        overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
+        overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
+        danmakuContext.setDuplicateMergingEnabled(false)
+                //是否重复合并
+                .setScrollSpeedFactor(1.2f)
+                //设置文字的比例
+                .setScaleTextSize(1.2f)
+                //设置显示最大行数
+                .setMaximumLines(maxLInesPair)
+                //设置防，null代表可以重叠
+                .preventOverlapping(overlappingEnablePair);
     }
 
     void initVideoDurationSomeThing() {

@@ -563,7 +563,7 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
                 setPlayState(STATE_PLAYING);
                 mPlayerContainer.setKeepScreenOn(true);
                 if (danmakuView != null && danmakuView.isPrepared()) {
-                    this.danmakuView.start(getCurrentPosition());
+                    this.danmakuView.seekTo(getCurrentPosition());
                 }
                 break;
             case AbstractPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED:
