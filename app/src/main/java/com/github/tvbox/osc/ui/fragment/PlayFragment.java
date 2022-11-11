@@ -329,11 +329,16 @@ public class PlayFragment extends BaseLazyFragment {
         HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<>(16);
         overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
         overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
+        String danmuSizeConfig = Hawk.get(HawkConfig.DANMU_SIZE,"标准");
+        Float danmuSize = 1.2f;
+        if("大".equalsIgnoreCase(danmuSizeConfig)){
+            danmuSize = 1.8f;
+        }else if("超大".equalsIgnoreCase(danmuSizeConfig)){
+            danmuSize = 2.5f;
+        }
         danmakuContext.setDuplicateMergingEnabled(false)
-                //是否重复合并
-                .setScrollSpeedFactor(1.2f)
                 //设置文字的比例
-                .setScaleTextSize(1.2f)
+                .setScaleTextSize(danmuSize)
                 //设置显示最大行数
                 .setMaximumLines(maxLInesPair)
                 //设置防，null代表可以重叠

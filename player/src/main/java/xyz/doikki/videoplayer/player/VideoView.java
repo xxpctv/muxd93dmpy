@@ -561,9 +561,6 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
                 setPlayState(STATE_BUFFERED);
                 if (danmakuView != null && danmakuView.isPrepared()) {
                     long cur = getCurrentPosition();
-                    if(cur>3000){
-                        cur = cur - 3000;
-                    }
                     this.danmakuView.seekTo(cur);
                 }
                 break;
@@ -572,9 +569,6 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
                 mPlayerContainer.setKeepScreenOn(true);
                 if (danmakuView != null && danmakuView.isPrepared()) {
                     long cur = getCurrentPosition();
-                    if(cur>3000){
-                        cur = cur - 3000;
-                    }
                     this.danmakuView.seekTo(cur);
                 }
                 break;
