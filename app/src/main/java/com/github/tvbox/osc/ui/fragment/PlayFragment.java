@@ -308,6 +308,9 @@ public class PlayFragment extends BaseLazyFragment {
                 if (Math.abs(mVideoView.getSpeed()) - 1.0 > 1e-6) {
                     timer.add((long) (timer.lastInterval() * (mVideoView.getSpeed() - 1)));
                 }
+                if(Math.abs(mVideoView.getCurrentPosition() - danmakuView.getCurrentTime()) > 3000){
+                    danmakuView.start(mVideoView.getCurrentPosition());
+                }
             }
 
             @Override
@@ -337,6 +340,7 @@ public class PlayFragment extends BaseLazyFragment {
             danmuSize = 2.5f;
         }
         danmakuContext.setDuplicateMergingEnabled(false)
+                .setScrollSpeedFactor(1.3f)
                 //设置文字的比例
                 .setScaleTextSize(danmuSize)
                 //设置显示最大行数
