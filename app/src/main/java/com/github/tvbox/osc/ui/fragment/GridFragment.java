@@ -314,4 +314,8 @@ public class GridFragment extends BaseLazyFragment {
         if (gridFilterDialog != null)
             gridFilterDialog.show();
     }
+    public void forceRefresh() {
+            page = 1;
+            initData();
+    }
 }

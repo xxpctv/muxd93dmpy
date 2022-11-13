@@ -336,7 +336,7 @@ public class PlayFragment extends BaseLazyFragment {
             danmuSize = 2.5f;
         }
         danmakuContext.setDuplicateMergingEnabled(false)
-                .setScrollSpeedFactor(1.3f)
+                .setScrollSpeedFactor(1.2f)
                 //设置文字的比例
                 .setScaleTextSize(danmuSize)
                 //设置显示最大行数
