@@ -96,7 +96,7 @@ public abstract class CallBackUtil<T> {
         @Override
         public InputStream onParseResponse(RealResponse response) {
             try {
-                return IOUtils.toBufferedInputStream(response.inputStream);
+                return response.inputStream;
             } catch (Exception e) {
                 throw new RuntimeException("failure");
             }

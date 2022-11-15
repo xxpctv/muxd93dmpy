@@ -665,7 +665,7 @@ public class PlayFragment extends BaseLazyFragment {
                             danmakuView.release();
                         }
                         if ("bilidanmu".equalsIgnoreCase(mVodInfo.area)) {
-                            String u = mVodInfo.seriesMap.get("B站").get(0).url;
+                            String u = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex).url;
                             String cid = u.split("_")[1];
                             UrlHttpUtil.get("https://comment.bilibili.com/" + cid + ".xml", new CallBackUtil.CallBackStream() {
                                 @Override
