@@ -303,7 +303,31 @@ public class PlayFragment extends BaseLazyFragment {
             }
         });
         mVideoView.setVideoController(mController);
-
+        //设置最大显示行数
+        HashMap<Integer, Integer> maxLInesPair = new HashMap<>(16);
+        maxLInesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 8);
+        //设置是否禁止重叠
+        HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<>(16);
+        overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
+        overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
+        String danmuSizeConfig = Hawk.get(HawkConfig.DANMU_SIZE,"标准");
+        Float danmuSize = 1.2f;
+        if("大".equalsIgnoreCase(danmuSizeConfig)){
+            danmuSize = 1.8f;
+        }else if("超大".equalsIgnoreCase(danmuSizeConfig)){
+            danmuSize = 2.5f;
+        }
+        danmakuContext = DanmakuContext.create();
+        danmakuContext.setDuplicateMergingEnabled(false)
+                .setScrollSpeedFactor(1.2f)
+                //设置文字的比例
+                .setScaleTextSize(danmuSize)
+                //设置显示最大行数
+                .setMaximumLines(maxLInesPair)
+                //设置防，null代表可以重叠
+                .preventOverlapping(overlappingEnablePair);
+    }
+    void initDanmuView(){
         danmakuView = (IDanmakuView) findViewById(R.id.danmakuView);
         danmakuView.enableDanmakuDrawingCache(true);
         danmakuView.setCallback(new DrawHandler.Callback() {
@@ -329,30 +353,7 @@ public class PlayFragment extends BaseLazyFragment {
 
             }
         });
-        danmakuContext = DanmakuContext.create();
         mVideoView.setDanmuView(danmakuView);
-        //设置最大显示行数
-        HashMap<Integer, Integer> maxLInesPair = new HashMap<>(16);
-        maxLInesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 8);
-        //设置是否禁止重叠
-        HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<>(16);
-        overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
-        overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
-        String danmuSizeConfig = Hawk.get(HawkConfig.DANMU_SIZE,"标准");
-        Float danmuSize = 1.2f;
-        if("大".equalsIgnoreCase(danmuSizeConfig)){
-            danmuSize = 1.8f;
-        }else if("超大".equalsIgnoreCase(danmuSizeConfig)){
-            danmuSize = 2.5f;
-        }
-        danmakuContext.setDuplicateMergingEnabled(false)
-                .setScrollSpeedFactor(1.2f)
-                //设置文字的比例
-                .setScaleTextSize(danmuSize)
-                //设置显示最大行数
-                .setMaximumLines(maxLInesPair)
-                //设置防，null代表可以重叠
-                .preventOverlapping(overlappingEnablePair);
     }
 
     void initVideoDurationSomeThing() {
@@ -661,10 +662,8 @@ public class PlayFragment extends BaseLazyFragment {
                         }
                         mVideoView.start();
                         mController.resetSpeed();
-                        if (danmakuView != null) {
-                            danmakuView.release();
-                        }
                         if ("bilidanmu".equalsIgnoreCase(mVodInfo.area)) {
+                            initDanmuView();
                             String u = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex).url;
                             String cid = u.split("_")[1];
                             UrlHttpUtil.get("https://comment.bilibili.com/" + cid + ".xml", new CallBackUtil.CallBackStream() {
