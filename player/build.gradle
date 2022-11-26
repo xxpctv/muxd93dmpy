@@ -35,7 +35,8 @@ android {
 
 dependencies {
     implementation "androidx.annotation:annotation:1.3.0"
-    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+//    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation files('..\\app\\libs\\dfm-0.9.25.aar')
 
     api "com.google.android.exoplayer:exoplayer-core:2.14.2"
     api "com.google.android.exoplayer:exoplayer-dash:2.14.2"
