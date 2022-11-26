@@ -249,6 +249,9 @@ public class GridFragment extends BaseLazyFragment {
                 if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
                     if (page == 1) {
                         showSuccess();
+                        if(absXml.movie.videoList.get(0).sourceKey.contains("py_bili")) {
+                            mGridView.setLayoutManager(new V7GridLayoutManager(mContext, 3));
+                        }
                         isLoad = true;
                         gridAdapter.setNewData(absXml.movie.videoList);
                     } else {
