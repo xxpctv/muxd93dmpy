@@ -52,7 +52,6 @@ public class App extends MultiDexApplication {
                 .setSupportSubunits(Subunits.MM);
         PlayerHelper.init();
         PythonLoader.getInstance().setApplication(this);
-        JSEngine.getInstance().create();
     }
 
     private void initParams() {
