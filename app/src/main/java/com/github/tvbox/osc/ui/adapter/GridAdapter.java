@@ -1,5 +1,6 @@
 package com.github.tvbox.osc.ui.adapter;
 
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,6 +15,7 @@ import com.github.tvbox.osc.picasso.RoundTransformation;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.MD5;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 
@@ -34,21 +36,57 @@ public class GridAdapter extends BaseQuickAdapter<Movie.Video, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder helper, Movie.Video item) {
+        FrameLayout itemGrid = helper.getView(R.id.itemGrid);
+        if (item.sourceKey != null && item.sourceKey.contains("py_bili")) {
+            itemGrid.getLayoutParams().width = 580;
+            itemGrid.getLayoutParams().height = 480;
+        }
+        Transformation transformation = new Transformation() {
+            @Override
+            public Bitmap transform(Bitmap source) {
+                //设置宽度固定为width，如果高度固定宽度自适应同理
+                int targetWidth = itemGrid.getWidth();
+                if(targetWidth == 0){
+                    return source;
+                }
+                double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
+                int targetHeight = (int) (targetWidth * aspectRatio);
+                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+                if (result != source) {
+                    //如果是同等大小的就回收
+                    source.recycle();
+                }
+                return result;
+            }
+            @Override
+            public String key() {
+                return MD5.string2MD5(item.pic + "position=" + helper.getLayoutPosition());
+            }
+        };
         if(this.mShowList) {
             helper.setText(R.id.tvNote, item.note);
             helper.setText(R.id.tvName, item.name);
             ImageView ivThumb = helper.getView(R.id.ivThumb);
             //由于部分电视机使用glide报错
             if (!TextUtils.isEmpty(item.pic)) {
-                Picasso.get()
-                        .load(DefaultConfig.checkReplaceProxy(item.pic))
-                        .transform(new RoundTransformation(MD5.string2MD5(item.pic + "position=" + helper.getLayoutPosition()))
-                                .centerCorp(true)
-                                .override(AutoSizeUtils.mm2px(mContext, 300), AutoSizeUtils.mm2px(mContext, 400))
-                                .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
-                        .placeholder(R.drawable.img_loading_placeholder)
-                        .error(R.drawable.img_loading_placeholder)
-                        .into(ivThumb);
+                if (item.sourceKey != null && item.sourceKey.contains("py_bili")) {
+                    Picasso.get()
+                            .load(DefaultConfig.checkReplaceProxy(item.pic))
+                            .transform(transformation)
+                            .placeholder(R.drawable.img_loading_placeholder)
+                            .error(R.drawable.img_loading_placeholder)
+                            .into(ivThumb);
+                }else {
+                    Picasso.get()
+                            .load(DefaultConfig.checkReplaceProxy(item.pic))
+                            .transform(new RoundTransformation(MD5.string2MD5(item.pic + "position=" + helper.getLayoutPosition()))
+                                    .centerCorp(true)
+                                    .override(AutoSizeUtils.mm2px(mContext, 300), AutoSizeUtils.mm2px(mContext, 400))
+                                    .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
+                            .placeholder(R.drawable.img_loading_placeholder)
+                            .error(R.drawable.img_loading_placeholder)
+                            .into(ivThumb);
+                }
             } else {
                 ivThumb.setImageResource(R.drawable.img_loading_placeholder);
             }
@@ -89,23 +127,24 @@ public class GridAdapter extends BaseQuickAdapter<Movie.Video, BaseViewHolder> {
         ImageView ivThumb = helper.getView(R.id.ivThumb);
         //由于部分电视机使用glide报错
         if (!TextUtils.isEmpty(item.pic)) {
-            int width=300,height=400;
-            if(item.sourceKey.contains("py_bili")) {
-                FrameLayout itemGrid = helper.getView(R.id.itemGrid);
-                itemGrid.getLayoutParams().width = 540;
-                itemGrid.getLayoutParams().height = 338;
-                width = 540;
-                height = 338;
+            if (item.sourceKey != null && item.sourceKey.contains("py_bili")) {
+                Picasso.get()
+                        .load(DefaultConfig.checkReplaceProxy(item.pic))
+                        .transform(transformation)
+                        .placeholder(R.drawable.img_loading_placeholder)
+                        .error(R.drawable.img_loading_placeholder)
+                        .into(ivThumb);
+            }else {
+                Picasso.get()
+                        .load(DefaultConfig.checkReplaceProxy(item.pic))
+                        .transform(new RoundTransformation(MD5.string2MD5(item.pic + "position=" + helper.getLayoutPosition()))
+                                .centerCorp(true)
+                                .override(AutoSizeUtils.mm2px(mContext, 300), AutoSizeUtils.mm2px(mContext, 400))
+                                .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
+                        .placeholder(R.drawable.img_loading_placeholder)
+                        .error(R.drawable.img_loading_placeholder)
+                        .into(ivThumb);
             }
-            Picasso.get()
-                    .load(DefaultConfig.checkReplaceProxy(item.pic))
-                    .transform(new RoundTransformation(MD5.string2MD5(item.pic + "position=" + helper.getLayoutPosition()))
-                            .centerCorp(true)
-                            .override(AutoSizeUtils.mm2px(mContext, width), AutoSizeUtils.mm2px(mContext, height))
-                            .roundRadius(AutoSizeUtils.mm2px(mContext, 10), RoundTransformation.RoundType.ALL))
-                    .placeholder(R.drawable.img_loading_placeholder)
-                    .error(R.drawable.img_loading_placeholder)
-                    .into(ivThumb);
         } else {
             ivThumb.setImageResource(R.drawable.img_loading_placeholder);
         }
