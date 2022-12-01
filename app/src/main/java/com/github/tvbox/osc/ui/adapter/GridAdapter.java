@@ -39,7 +39,7 @@ public class GridAdapter extends BaseQuickAdapter<Movie.Video, BaseViewHolder> {
         FrameLayout itemGrid = helper.getView(R.id.itemGrid);
         if (item.sourceKey != null && item.sourceKey.contains("py_bili")) {
             itemGrid.getLayoutParams().width = 580;
-            itemGrid.getLayoutParams().height = 480;
+            itemGrid.getLayoutParams().height = 400;
         }
         Transformation transformation = new Transformation() {
             @Override
@@ -49,9 +49,7 @@ public class GridAdapter extends BaseQuickAdapter<Movie.Video, BaseViewHolder> {
                 if(targetWidth == 0){
                     return source;
                 }
-                double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
-                int targetHeight = (int) (targetWidth * aspectRatio);
-                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, 362, false);
                 if (result != source) {
                     //如果是同等大小的就回收
                     source.recycle();
