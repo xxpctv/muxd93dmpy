@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
@@ -50,6 +52,8 @@ import com.github.tvbox.osc.bean.Subtitle;
 import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.cache.CacheManager;
 import com.github.tvbox.osc.danmu.BiliDanmukuParser;
+import com.github.tvbox.osc.danmu.ChatBroadcastWsClient;
+import com.github.tvbox.osc.danmu.GiftDanmakuManager;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.player.IjkMediaPlayer;
 import com.github.tvbox.osc.player.MyVideoView;
@@ -72,6 +76,9 @@ import com.github.tvbox.osc.util.thunder.Thunder;
 import com.github.tvbox.osc.util.urlhttp.CallBackUtil;
 import com.github.tvbox.osc.util.urlhttp.UrlHttpUtil;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
+import com.google.common.base.Strings;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.HttpHeaders;
@@ -116,6 +123,7 @@ import master.flame.danmaku.danmaku.loader.IllegalDataException;
 import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
+import master.flame.danmaku.danmaku.model.IDanmakus;
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
@@ -140,6 +148,10 @@ public class PlayFragment extends BaseLazyFragment {
 
     private DanmakuContext danmakuContext;
     private long videoDuration = -1;
+    private GiftDanmakuManager giftDanmakuManager;
+    private ChatBroadcastWsClient chatBroadcastWsClient;
+    private int scDanmakuType = BaseDanmaku.TYPE_FIX_BOTTOM;
+    BaseDanmakuParser danmakuParser;
 
     @Override
     protected int getLayoutResID() {
@@ -354,6 +366,128 @@ public class PlayFragment extends BaseLazyFragment {
             }
         });
         mVideoView.setDanmuView(danmakuView);
+    }
+
+    public void initLiveDanmu(){
+        danmakuParser = new BaseDanmakuParser() {
+            @Override
+            protected IDanmakus parse() {
+                return new Danmakus();
+            }
+        };
+        danmakuView = (IDanmakuView) findViewById(R.id.danmakuView);
+        danmakuView.enableDanmakuDrawingCache(true);
+        danmakuView.show();
+        danmakuView.setCallback(new DrawHandler.Callback() {
+            @Override
+            public void prepared() {
+                danmakuView.start();
+            }
+
+            @Override
+            public void updateTimer(DanmakuTimer danmakuTimer) {
+            }
+
+            @Override
+            public void danmakuShown(BaseDanmaku baseDanmaku) {
+            }
+
+            @Override
+            public void drawingFinished() {
+            }
+        });
+        mVideoView.setDanmuView(danmakuView);
+    }
+    private void initChatBroadcast(Long id,String token){
+        chatBroadcastWsClient = new ChatBroadcastWsClient(id, token);
+        chatBroadcastWsClient.setCallBack(new ChatBroadcastWsClient.CallBack() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onReceiveDanmu(String text, float textSize, int textColor, boolean textShadowTransparent, String msg) {
+                addDanmaku(text, textSize, textColor, textShadowTransparent);
+            }
+
+            @Override
+            public void onReceiveSuperChatMessage(String message, String messageFontColor, String uname, String msg) {
+                if(scDanmakuType == BaseDanmaku.TYPE_FIX_BOTTOM
+                        || scDanmakuType == BaseDanmaku.TYPE_FIX_TOP
+                        || scDanmakuType == BaseDanmaku.TYPE_SCROLL_RL
+                        || scDanmakuType == BaseDanmaku.TYPE_SCROLL_LR
+                        || scDanmakuType == BaseDanmaku.TYPE_SPECIAL) {
+                    String text = uname + ":" + message;
+                    int color;
+                    if(Strings.isNullOrEmpty(message)){
+                        color = Color.WHITE;
+                    }else{
+                        color = Color.parseColor(messageFontColor);
+                    }
+                    addDanmaku(text, 25, color, false, scDanmakuType);
+                }
+            }
+
+            @Override
+            public void onReceiveSendGift(String action, String giftName, Integer num, String uname, String msg) {
+
+            }
+
+            @Override
+            public void onReceiveOtherMessage(String message) {
+            }
+
+            @Override
+            public void onClose(int code, String reason, boolean remote) {
+
+            }
+        });
+        startChatBroadcastWsClient();
+    }
+
+    private void startChatBroadcastWsClient(){
+        if(chatBroadcastWsClient != null){
+            try {
+                chatBroadcastWsClient.start();
+            }
+            catch (Exception error){
+                error.printStackTrace();
+                System.out.println(error.getMessage());
+            }
+        }
+    }
+
+    private void addDanmaku(String content, float textSize, int textColor, boolean textShadowTransparent) {
+        addDanmaku(content, textSize, textColor, textShadowTransparent, BaseDanmaku.TYPE_SCROLL_RL);
+    }
+
+    private void addDanmaku(String content, float textSize, int textColor, boolean textShadowTransparent, int type){
+        if(danmakuContext != null  && danmakuView.isPrepared()){
+            BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(type);
+            if (danmaku != null) {
+                textSize = textSize * (danmakuParser.getDisplayer().getDensity() - 0.6f);
+                danmaku.text = content;
+                if(type == BaseDanmaku.TYPE_FIX_BOTTOM){
+                    int width = danmakuContext.getDisplayer().getWidth();
+                    int maxSize = (int) (width / textSize) - 10;
+                    int textLength = content.length();
+                    int lineLength = (textLength + maxSize - 1) / maxSize;
+                    String[] lines = new String[lineLength];
+                    for(int i = 0; i < lineLength; i++){
+                        lines[i] = content.substring(i * maxSize, Math.min(i * maxSize + maxSize, textLength));
+                    }
+                    danmaku.lines = lines;
+                }
+                danmaku.padding = 0;
+                danmaku.priority = 0;  // 可能会被各种过滤器过滤并隐藏显示
+                danmaku.isLive = true;
+                danmaku.setTime(danmakuView.getCurrentTime() + 500);
+                danmaku.textSize = textSize;
+                danmaku.textColor = textColor;
+                danmaku.textShadowColor = textShadowTransparent ? Color.TRANSPARENT : Color.BLACK;
+                danmakuView.addDanmaku(danmaku);
+            }
+        }
     }
 
     void initVideoDurationSomeThing() {
@@ -675,6 +809,22 @@ public class PlayFragment extends BaseLazyFragment {
                                 @Override
                                 public void onResponse(InputStream response) {
                                     danmakuView.prepare(createParser(new InflaterInputStream(response, new Inflater(true))), danmakuContext);
+                                }
+                            });
+                        }else if("bililivedanmu".equalsIgnoreCase(mVodInfo.area)){
+                            initLiveDanmu();
+                            String id = mVodInfo.id;
+                            UrlHttpUtil.get("https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo?id=" + id + "&type=0", new CallBackUtil.CallBackString() {
+                                @Override
+                                public void onFailure(int code, String errorMessage) {
+                                    System.out.println(code + errorMessage);
+                                }
+                                @Override
+                                public void onResponse(String response) {
+                                    JsonObject obj = new Gson().fromJson(response,JsonObject.class);
+                                    String token = obj.getAsJsonObject("data").get("token").getAsString();
+                                    initChatBroadcast(Long.valueOf(id),token);
+                                    danmakuView.prepare(danmakuParser, danmakuContext);
                                 }
                             });
                         }
