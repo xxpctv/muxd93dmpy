@@ -8,6 +8,7 @@ import com.undcover.freedom.pyramid.PythonLoader;
 import com.github.catvod.crawler.SpiderNull;
 
 import com.github.catvod.crawler.JarLoader;
+import com.github.catvod.crawler.JsLoader;
 import com.github.catvod.crawler.Spider;
 import com.github.tvbox.osc.base.App;
 import com.github.tvbox.osc.bean.LiveChannelGroup;
@@ -15,7 +16,6 @@ import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.bean.LiveChannelItem;
 import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.bean.SourceBean;
-import com.github.tvbox.osc.js.JSEngine;
 import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.util.AES;
 import com.github.tvbox.osc.util.AdBlocker;
@@ -67,6 +67,7 @@ public class ApiConfig {
     private SourceBean emptyHome = new SourceBean();
 
     private JarLoader jarLoader = new JarLoader();
+    private JsLoader jsLoader = new JsLoader();
 
     private String userAgent = "okhttp/3.15";
 
@@ -344,7 +345,6 @@ public class ApiConfig {
             else
                 setSourceBean(sh);
         }
-        JSEngine.getInstance().clear();
         // 需要使用vip解析的flag
         vipParseFlags = DefaultConfig.safeJsonStringList(infoJson, "flags");
         // 解析地址
@@ -569,8 +569,8 @@ public class ApiConfig {
     }
 
     public Spider getCSP(SourceBean sourceBean) {
-        boolean js = sourceBean.getApi().startsWith("js_") || sourceBean.getApi().endsWith(".js") || sourceBean.getApi().contains(".js?");
-        if (js) return JSEngine.getInstance().getSpider(sourceBean);
+        boolean js = sourceBean.getApi().endsWith(".js") || sourceBean.getApi().contains(".js?");
+        if (js) return jsLoader.getSpider(sourceBean.getKey(), sourceBean.getApi(), sourceBean.getExt(), sourceBean.getJar());
         if (sourceBean.getApi().startsWith("py_")) {
         try {
             return PythonLoader.getInstance().getSpider(sourceBean.getKey(), sourceBean.getExt());
@@ -683,7 +683,7 @@ public class ApiConfig {
         return ijkCodes.get(0);
     }
 
-    public String clanToAddress(String lanLink) {
+    String clanToAddress(String lanLink) {
         if (lanLink.startsWith("clan://localhost/")) {
             return lanLink.replace("clan://localhost/", ControlManager.get().getAddress(true) + "file/");
         } else {
