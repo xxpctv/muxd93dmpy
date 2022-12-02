@@ -399,6 +399,10 @@ public class PlayFragment extends BaseLazyFragment {
         mVideoView.setDanmuView(danmakuView);
     }
     private void initChatBroadcast(Long id,String token){
+        if(chatBroadcastWsClient != null){
+            chatBroadcastWsClient.close();
+            chatBroadcastWsClient = null;
+        }
         chatBroadcastWsClient = new ChatBroadcastWsClient(id, token);
         chatBroadcastWsClient.setCallBack(new ChatBroadcastWsClient.CallBack() {
             @Override
@@ -1053,6 +1057,10 @@ public class PlayFragment extends BaseLazyFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if(chatBroadcastWsClient != null){
+            chatBroadcastWsClient.close();
+            chatBroadcastWsClient = null;
+        }
         if (mVideoView != null) {
             mVideoView.release();
             mVideoView = null;

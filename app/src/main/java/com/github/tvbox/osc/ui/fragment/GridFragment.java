@@ -250,7 +250,7 @@ public class GridFragment extends BaseLazyFragment {
                     if (page == 1) {
                         showSuccess();
                         if(absXml.movie.videoList.get(0).sourceKey.contains("py_bili")) {
-                            mGridView.setLayoutManager(new V7GridLayoutManager(mContext, 3));
+                            mGridView.setLayoutManager(new V7GridLayoutManager(mContext, mGridView.getWidth() / 580));
                         }
                         isLoad = true;
                         gridAdapter.setNewData(absXml.movie.videoList);
