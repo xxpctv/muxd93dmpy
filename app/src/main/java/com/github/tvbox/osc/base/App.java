@@ -10,6 +10,7 @@ import com.github.tvbox.osc.data.AppDataManager;
 import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.util.AppManager;
 import com.github.tvbox.osc.util.EpgUtil;
+import com.github.tvbox.osc.util.FileUtils;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.OkGoHelper;
 import com.github.tvbox.osc.util.PlayerHelper;
@@ -52,6 +53,7 @@ public class App extends MultiDexApplication {
                 .setSupportSubunits(Subunits.MM);
         PlayerHelper.init();
         JSEngine.getInstance().create();
+        FileUtils.cleanPlayerCache();
         PythonLoader.getInstance().setApplication(this);
     }
 
