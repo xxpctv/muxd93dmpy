@@ -38,20 +38,15 @@ public class GridAdapter extends BaseQuickAdapter<Movie.Video, BaseViewHolder> {
     protected void convert(BaseViewHolder helper, Movie.Video item) {
         FrameLayout itemGrid = helper.getView(R.id.itemGrid);
         if (item.sourceKey != null && item.sourceKey.contains("py_bili")) {
-            itemGrid.getLayoutParams().width = 580;
+            itemGrid.getLayoutParams().width = 560;
             itemGrid.getLayoutParams().height = 400;
         }
         Transformation transformation = new Transformation() {
             @Override
             public Bitmap transform(Bitmap source) {
                 //设置宽度固定为width，如果高度固定宽度自适应同理
-                int targetWidth = itemGrid.getWidth();
-                if(targetWidth == 0){
-                    return source;
-                }
-                Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, 362, false);
+                Bitmap result = Bitmap.createScaledBitmap(source, 560, 360, false);
                 if (result != source) {
-                    //如果是同等大小的就回收
                     source.recycle();
                 }
                 return result;
