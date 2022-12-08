@@ -78,6 +78,7 @@ import com.github.tvbox.osc.util.urlhttp.UrlHttpUtil;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
@@ -104,6 +105,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -317,7 +319,7 @@ public class PlayFragment extends BaseLazyFragment {
         mVideoView.setVideoController(mController);
         //设置最大显示行数
         HashMap<Integer, Integer> maxLInesPair = new HashMap<>(16);
-        maxLInesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 8);
+        maxLInesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 6);
         //设置是否禁止重叠
         HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<>(16);
         overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
@@ -801,9 +803,49 @@ public class PlayFragment extends BaseLazyFragment {
                         }
                         mVideoView.start();
                         mController.resetSpeed();
+                        String u = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex).url;
+                        if (u != null && u.contains("v.qq.com")) {
+                            initLiveDanmu();
+                            String qqVid = u.split("/")[6].replace(".html", "");
+                            List<String> danmuList = new ArrayList<>();
+                            UrlHttpUtil.get("https://dm.video.qq.com/barrage/base/" + qqVid, new CallBackUtil.CallBackString() {
+                                @Override
+                                public void onFailure(int code, String errorMessage) {
+                                    System.out.println(errorMessage);
+                                }
+
+                                @Override
+                                public void onResponse(String response) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            JsonObject danmuBaseInfo = new Gson().fromJson(response, JsonObject.class);
+                                            JsonObject segmentIndex = danmuBaseInfo.getAsJsonObject("segment_index");
+                                            for (String key : segmentIndex.keySet()) {
+                                                String danmuUrl = "https://dm.video.qq.com/barrage/segment/l0045z5d3s0/" + segmentIndex.getAsJsonObject(key).get("segment_name").getAsString();
+                                                UrlHttpUtil.syncGet(danmuUrl, new CallBackUtil.CallBackString() {
+                                                    @Override
+                                                    public void onFailure(int code, String errorMessage) {
+                                                    }
+                                                    @Override
+                                                    public void onResponse(String danmuListStr) {
+                                                        JsonObject danmuList = new Gson().fromJson(danmuListStr, JsonObject.class);
+                                                        JsonArray barrageList = danmuList.get("barrage_list").getAsJsonArray();
+                                                        for (int i = 0; i < barrageList.size(); i++) {
+                                                            JsonObject danmuItem = barrageList.get(i).getAsJsonObject();
+                                                            addSimpleDanmaku(danmuItem.get("content").getAsString(), danmuItem.get("time_offset").getAsLong());
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }).start();
+                                }
+                            });
+                            danmakuView.prepare(danmakuParser, danmakuContext);
+                        }
                         if ("bilidanmu".equalsIgnoreCase(mVodInfo.area)) {
                             initDanmuView();
-                            String u = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex).url;
                             String cid = u.split("_")[1];
                             UrlHttpUtil.get("https://comment.bilibili.com/" + cid + ".xml", new CallBackUtil.CallBackStream() {
                                 @Override
@@ -837,6 +879,23 @@ public class PlayFragment extends BaseLazyFragment {
             }
         });
     }
+
+    private void addSimpleDanmaku(String content, long time) {
+        if (danmakuContext != null && danmakuView.isPrepared()) {
+            BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+            if (danmaku != null) {
+                danmaku.text = content;
+                danmaku.textSize = 25 * (danmakuParser.getDisplayer().getDensity() - 0.6f);
+                danmaku.textColor = -1;
+                danmaku.padding = 0;
+                danmaku.priority = 0;  // 可能会被各种过滤器过滤并隐藏显示
+                danmaku.isLive = false;
+                danmaku.setTime(time);
+                danmakuView.addDanmaku(danmaku);
+            }
+        }
+    }
+
 
     private void initSubtitleView() {
         TrackInfo trackInfo = null;

@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class UrlHttpUtil {
     private static final String METHOD_GET = "GET";
+    private static final String METHOD_SYNC_GET = "syncGET";
+
     private static final String METHOD_POST = "POST";
 
     public static final String FILE_TYPE_FILE = "file/*";
@@ -24,6 +26,10 @@ public class UrlHttpUtil {
      */
     public static void get(String url, CallBackUtil callBack) {
         get(url, null, null, callBack);
+    }
+
+    public static void syncGet(String url, CallBackUtil callBack) {
+        syncGet(url, null, null, callBack);
     }
 
     /**
@@ -45,6 +51,10 @@ public class UrlHttpUtil {
      */
     public static void get(String url, Map<String, String> paramsMap, Map<String, String> headerMap, CallBackUtil callBack) {
         new RequestUtil(METHOD_GET, url, paramsMap, headerMap, callBack).execute();
+    }
+
+    public static void syncGet(String url, Map<String, String> paramsMap, Map<String, String> headerMap, CallBackUtil callBack) {
+        new RequestUtil(METHOD_SYNC_GET, url, paramsMap, headerMap, callBack).execute();
     }
 
     /**
