@@ -833,9 +833,6 @@ public class PlayFragment extends BaseLazyFragment {
                                                         JsonObject danmuList = new Gson().fromJson(danmuListStr, JsonObject.class);
                                                         JsonArray barrageList = danmuList.get("barrage_list").getAsJsonArray();
                                                         for (int i = 0; i < barrageList.size(); i++) {
-                                                            if(i>=200){
-                                                                break;
-                                                            }
                                                             JsonObject danmuItem = barrageList.get(i).getAsJsonObject();
                                                             addSimpleDanmaku(danmuItem.get("content").getAsString(), danmuItem.get("time_offset").getAsLong());
                                                         }
@@ -893,9 +890,6 @@ public class PlayFragment extends BaseLazyFragment {
                                                                         if (danmuList.get("data").getAsJsonObject().get("total").getAsInt()>0) {
                                                                             JsonArray barrageList = danmuList.get("data").getAsJsonObject().get("items").getAsJsonArray();
                                                                             for (int j = 0; j < barrageList.size(); j++) {
-                                                                                if (j >= 300) {
-                                                                                    break;
-                                                                                }
                                                                                 JsonObject danmuItem = barrageList.get(j).getAsJsonObject();
                                                                                 addSimpleDanmaku(danmuItem.get("content").getAsString(), danmuItem.get("time").getAsLong());
                                                                             }
