@@ -815,7 +815,7 @@ public class PlayFragment extends BaseLazyFragment {
                                     danmakuView.prepare(createParser(new InflaterInputStream(response, new Inflater(true))), danmakuContext);
                                 }
                             });
-                        }else if("bililivedanmu".equalsIgnoreCase(mVodInfo.area)){
+                        }else if("bililivedanmu".equalsIgnoreCase(mVodInfo.area) && Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
                             initLiveDanmu();
                             String id = mVodInfo.id;
                             UrlHttpUtil.get("https://api.live.bilibili.com/xlive/web-room/v1/index/getDanmuInfo?id=" + id + "&type=0", new CallBackUtil.CallBackString() {
