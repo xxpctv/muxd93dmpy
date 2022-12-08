@@ -890,13 +890,15 @@ public class PlayFragment extends BaseLazyFragment {
                                                                     @Override
                                                                     public void onResponse(String danmuListStr) {
                                                                         JsonObject danmuList = new Gson().fromJson(danmuListStr, JsonObject.class);
-                                                                        JsonArray barrageList = danmuList.get("data").getAsJsonObject().get("items").getAsJsonArray();
-                                                                        for (int i = 0; i < barrageList.size(); i++) {
-                                                                            if(i>=300){
-                                                                                break;
+                                                                        if (danmuList.get("data").getAsJsonObject().get("total").getAsInt()>0) {
+                                                                            JsonArray barrageList = danmuList.get("data").getAsJsonObject().get("items").getAsJsonArray();
+                                                                            for (int j = 0; j < barrageList.size(); j++) {
+                                                                                if (j >= 300) {
+                                                                                    break;
+                                                                                }
+                                                                                JsonObject danmuItem = barrageList.get(j).getAsJsonObject();
+                                                                                addSimpleDanmaku(danmuItem.get("content").getAsString(), danmuItem.get("time").getAsLong());
                                                                             }
-                                                                            JsonObject danmuItem = barrageList.get(i).getAsJsonObject();
-                                                                            addSimpleDanmaku(danmuItem.get("content").getAsString(), danmuItem.get("time").getAsLong());
                                                                         }
                                                                     }
                                                                 });
