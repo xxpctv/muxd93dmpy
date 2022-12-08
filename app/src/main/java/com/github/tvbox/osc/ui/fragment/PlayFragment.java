@@ -112,6 +112,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -806,7 +807,7 @@ public class PlayFragment extends BaseLazyFragment {
                         String u = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex).url;
                         if (u != null && u.contains("v.qq.com")) {
                             initLiveDanmu();
-                            String qqVid = u.split("/")[6].replace(".html", "");
+                            String qqVid = u.split("/")[u.split("/").length-1].replace(".html", "");
                             List<String> danmuList = new ArrayList<>();
                             UrlHttpUtil.get("https://dm.video.qq.com/barrage/base/" + qqVid, new CallBackUtil.CallBackString() {
                                 @Override
@@ -822,7 +823,7 @@ public class PlayFragment extends BaseLazyFragment {
                                             JsonObject danmuBaseInfo = new Gson().fromJson(response, JsonObject.class);
                                             JsonObject segmentIndex = danmuBaseInfo.getAsJsonObject("segment_index");
                                             for (String key : segmentIndex.keySet()) {
-                                                String danmuUrl = "https://dm.video.qq.com/barrage/segment/l0045z5d3s0/" + segmentIndex.getAsJsonObject(key).get("segment_name").getAsString();
+                                                String danmuUrl = "https://dm.video.qq.com/barrage/segment/"+qqVid+"/" + segmentIndex.getAsJsonObject(key).get("segment_name").getAsString();
                                                 UrlHttpUtil.syncGet(danmuUrl, new CallBackUtil.CallBackString() {
                                                     @Override
                                                     public void onFailure(int code, String errorMessage) {
@@ -832,6 +833,9 @@ public class PlayFragment extends BaseLazyFragment {
                                                         JsonObject danmuList = new Gson().fromJson(danmuListStr, JsonObject.class);
                                                         JsonArray barrageList = danmuList.get("barrage_list").getAsJsonArray();
                                                         for (int i = 0; i < barrageList.size(); i++) {
+                                                            if(i>=200){
+                                                                break;
+                                                            }
                                                             JsonObject danmuItem = barrageList.get(i).getAsJsonObject();
                                                             addSimpleDanmaku(danmuItem.get("content").getAsString(), danmuItem.get("time_offset").getAsLong());
                                                         }
@@ -842,6 +846,68 @@ public class PlayFragment extends BaseLazyFragment {
                                     }).start();
                                 }
                             });
+                            danmakuView.prepare(danmakuParser, danmakuContext);
+                        }
+                        //芒果tv
+                        //https://galaxy.bz.mgtv.com/getctlbarrage?version=3.0.0&vid=17808762&abroad=0&pid=0&os=&uuid=&deviceid=5357deed-bf12-4926-95a9-3d5c01caac22&cid=412705&ticket=&mac=&platform=0&appVersion=3.0.0&reqtype=form-post&callback=&allowedRC=1
+                        if (u != null && u.contains("mgtv.com")) {
+                            initLiveDanmu();
+                            String mgcid = u.split("/")[u.split("/").length-2].replace(".html", "");
+                            String mgvid = u.split("/")[u.split("/").length-1].replace(".html", "");
+                            UrlHttpUtil.get("https://galaxy.bz.mgtv.com/getctlbarrage?version=3.0.0&vid="+mgvid
+                                    +"&abroad=0&pid=0&os=&uuid=&deviceid="+ UUID.randomUUID() +"&cid="+mgcid+"&ticket=&mac=&platform=0&appVersion=3.0.0&reqtype=form-post&callback=&allowedRC=1" , new CallBackUtil.CallBackString() {
+                                        @Override
+                                        public void onFailure(int code, String errorMessage) {
+                                            System.out.println(errorMessage);
+                                        }
+
+                                        @Override
+                                        public void onResponse(String danmuInfoStr) {
+                                            JsonObject danmuBaseInfo = new Gson().fromJson(danmuInfoStr, JsonObject.class);
+                                            String danmuUrlBase = "https://bullet-ali.hitv.com/" +
+                                                    danmuBaseInfo.get("data").getAsJsonObject().get("cdn_version").getAsString() + "/";
+
+                                            UrlHttpUtil.get("https://pcweb.api.mgtv.com/player/vinfo?video_id=" + mgvid
+                                                    + "&cid=&pid=&cxid=&_support=10000000&allowedRC=1&_support=10000000", new CallBackUtil.CallBackString() {
+                                                @Override
+                                                public void onFailure(int code, String errorMessage) {
+                                                }
+
+                                                @Override
+                                                public void onResponse(String vodInfoStr) {
+                                                    new Thread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            JsonObject vodIndo = new Gson().fromJson(vodInfoStr, JsonObject.class);
+                                                            int duration = vodIndo.get("data").getAsJsonObject().get("duration").getAsInt();
+                                                            for (int i = 0; i < duration / 60; i++) {
+                                                                String danmuUrl = danmuUrlBase + i + ".json";
+                                                                UrlHttpUtil.syncGet(danmuUrl, new CallBackUtil.CallBackString() {
+                                                                    @Override
+                                                                    public void onFailure(int code, String errorMessage) {
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onResponse(String danmuListStr) {
+                                                                        JsonObject danmuList = new Gson().fromJson(danmuListStr, JsonObject.class);
+                                                                        JsonArray barrageList = danmuList.get("data").getAsJsonObject().get("items").getAsJsonArray();
+                                                                        for (int i = 0; i < barrageList.size(); i++) {
+                                                                            if(i>=300){
+                                                                                break;
+                                                                            }
+                                                                            JsonObject danmuItem = barrageList.get(i).getAsJsonObject();
+                                                                            addSimpleDanmaku(danmuItem.get("content").getAsString(), danmuItem.get("time").getAsLong());
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }).start();
+                                                }
+                                            });
+                                        }
+                                    });
+
                             danmakuView.prepare(danmakuParser, danmakuContext);
                         }
                         if ("bilidanmu".equalsIgnoreCase(mVodInfo.area)) {
