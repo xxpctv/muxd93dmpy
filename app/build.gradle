@@ -80,7 +80,7 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: "libs", include: ["*"])
+    api fileTree(dir: "libs", include: ["*.aar","*.jar"])
     implementation 'com.github.smart-fun:XmlToJson:1.5.1'    // add this line
 
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
