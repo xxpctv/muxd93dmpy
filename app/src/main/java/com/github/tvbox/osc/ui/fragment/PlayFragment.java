@@ -320,7 +320,6 @@ public class PlayFragment extends BaseLazyFragment {
             @Override
             public void prepared() {
                 initSubtitleView();
-                initVideoDurationSomeThing();
             }
         });
         mVideoView.setVideoController(mController);
@@ -507,23 +506,6 @@ public class PlayFragment extends BaseLazyFragment {
                 danmaku.textShadowColor = textShadowTransparent ? Color.TRANSPARENT : Color.BLACK;
                 danmakuView.addDanmaku(danmaku);
             }
-        }
-    }
-
-    void initVideoDurationSomeThing() {
-        videoDuration = mVideoView.getMediaPlayer().getDuration();
-        if (videoDuration == 0) {
-            mController.mPlayerSpeedBtn.setVisibility(View.GONE);
-            mController.mPlayerTimeStartEndText.setVisibility(View.GONE);
-            mController.mPlayerTimeStartBtn.setVisibility(View.GONE);
-            mController.mPlayerTimeSkipBtn.setVisibility(View.GONE);
-            mController.mPlayerTimeResetBtn.setVisibility(View.GONE);
-        }else {
-            mController.mPlayerSpeedBtn.setVisibility(View.VISIBLE);
-            mController.mPlayerTimeStartEndText.setVisibility(View.VISIBLE);
-            mController.mPlayerTimeStartBtn.setVisibility(View.VISIBLE);
-            mController.mPlayerTimeSkipBtn.setVisibility(View.VISIBLE);
-            mController.mPlayerTimeResetBtn.setVisibility(View.VISIBLE);
         }
     }
 
