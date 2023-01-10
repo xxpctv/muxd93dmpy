@@ -960,46 +960,48 @@ public class PlayFragment extends BaseLazyFragment {
                     @Override
                     public void onResponse(String danmuInfoStr) {
                         JsonObject danmuBaseInfo = new Gson().fromJson(danmuInfoStr, JsonObject.class);
-                        String danmuUrlBase = "https://bullet-ali.hitv.com/" +
-                                danmuBaseInfo.get("data").getAsJsonObject().get("cdn_version").getAsString() + "/";
+                        if (danmuBaseInfo.get("data").getAsJsonObject().has("cdn_version")) {
+                            String danmuUrlBase = "https://bullet-ali.hitv.com/" +
+                                    danmuBaseInfo.get("data").getAsJsonObject().get("cdn_version").getAsString() + "/";
 
-                        UrlHttpUtil.get("https://pcweb.api.mgtv.com/player/vinfo?video_id=" + mgvid
-                                + "&cid=&pid=&cxid=&_support=10000000&allowedRC=1&_support=10000000", new CallBackUtil.CallBackString() {
-                            @Override
-                            public void onFailure(int code, String errorMessage) {
-                            }
+                            UrlHttpUtil.get("https://pcweb.api.mgtv.com/player/vinfo?video_id=" + mgvid
+                                    + "&cid=&pid=&cxid=&_support=10000000&allowedRC=1&_support=10000000", new CallBackUtil.CallBackString() {
+                                @Override
+                                public void onFailure(int code, String errorMessage) {
+                                }
 
-                            @Override
-                            public void onResponse(String vodInfoStr) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        JsonObject vodIndo = new Gson().fromJson(vodInfoStr, JsonObject.class);
-                                        int duration = vodIndo.get("data").getAsJsonObject().get("duration").getAsInt();
-                                        for (int i = 0; i < duration / 60; i++) {
-                                            String danmuUrl = danmuUrlBase + i + ".json";
-                                            UrlHttpUtil.syncGet(danmuUrl, new CallBackUtil.CallBackString() {
-                                                @Override
-                                                public void onFailure(int code, String errorMessage) {
-                                                }
+                                @Override
+                                public void onResponse(String vodInfoStr) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            JsonObject vodIndo = new Gson().fromJson(vodInfoStr, JsonObject.class);
+                                            int duration = vodIndo.get("data").getAsJsonObject().get("duration").getAsInt();
+                                            for (int i = 0; i < duration / 60; i++) {
+                                                String danmuUrl = danmuUrlBase + i + ".json";
+                                                UrlHttpUtil.syncGet(danmuUrl, new CallBackUtil.CallBackString() {
+                                                    @Override
+                                                    public void onFailure(int code, String errorMessage) {
+                                                    }
 
-                                                @Override
-                                                public void onResponse(String danmuListStr) {
-                                                    JsonObject danmuList = new Gson().fromJson(danmuListStr, JsonObject.class);
-                                                    if (danmuList.get("data").getAsJsonObject().get("total").getAsInt() > 0) {
-                                                        JsonArray barrageList = danmuList.get("data").getAsJsonObject().get("items").getAsJsonArray();
-                                                        for (int j = 0; j < barrageList.size(); j++) {
-                                                            JsonObject danmuItem = barrageList.get(j).getAsJsonObject();
-                                                            addSimpleDanmaku(danmuItem.get("content").getAsString(), danmuItem.get("time").getAsLong());
+                                                    @Override
+                                                    public void onResponse(String danmuListStr) {
+                                                        JsonObject danmuList = new Gson().fromJson(danmuListStr, JsonObject.class);
+                                                        if (danmuList.get("data").getAsJsonObject().get("total").getAsInt() > 0) {
+                                                            JsonArray barrageList = danmuList.get("data").getAsJsonObject().get("items").getAsJsonArray();
+                                                            for (int j = 0; j < barrageList.size(); j++) {
+                                                                JsonObject danmuItem = barrageList.get(j).getAsJsonObject();
+                                                                addSimpleDanmaku(danmuItem.get("content").getAsString(), danmuItem.get("time").getAsLong());
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            });
+                                                });
+                                            }
                                         }
-                                    }
-                                }).start();
-                            }
-                        });
+                                    }).start();
+                                }
+                            });
+                        }
                     }
                 });
                 danmakuView.prepare(danmakuParser, danmakuContext);
