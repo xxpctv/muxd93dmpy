@@ -373,7 +373,7 @@ public class VodController extends BaseController {
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                     listener.replay(false);
-//                    hideBottom();
+                    hideBottom();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -412,7 +412,7 @@ public class VodController extends BaseController {
                                     updatePlayerCfgView();
                                     listener.updatePlayerCfg();
                                     listener.replay(false);
-//                                    hideBottom();
+                                    hideBottom();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -466,7 +466,7 @@ public class VodController extends BaseController {
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                     listener.replay(false);
-//                    hideBottom();
+                    hideBottom();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
