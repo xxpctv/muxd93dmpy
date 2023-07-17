@@ -13,9 +13,6 @@ import com.github.tvbox.osc.base.BaseActivity;
 import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.ui.tv.QRCodeGen;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import me.jessyan.autosize.utils.AutoSizeUtils;
 
 public class PushActivity extends BaseActivity {

@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
+
 import java.util.Random;
 
 public class AudioWaveView extends View {

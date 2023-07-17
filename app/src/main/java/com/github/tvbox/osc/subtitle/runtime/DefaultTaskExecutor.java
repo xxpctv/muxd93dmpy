@@ -27,6 +27,7 @@ package com.github.tvbox.osc.subtitle.runtime;
 
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.Nullable;
 
 import java.util.concurrent.ExecutorService;

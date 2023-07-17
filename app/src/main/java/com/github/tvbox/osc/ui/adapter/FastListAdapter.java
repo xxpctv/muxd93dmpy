@@ -2,15 +2,12 @@ package com.github.tvbox.osc.ui.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.tvbox.osc.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FastListAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     public FastListAdapter() {

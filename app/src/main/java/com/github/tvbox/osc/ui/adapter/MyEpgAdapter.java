@@ -3,7 +3,6 @@ package com.github.tvbox.osc.ui.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.bean.Epginfo;
 import com.github.tvbox.osc.ui.tv.widget.AudioWaveView;
 
-import java.util.Date;
 import java.util.List;
 
 public class MyEpgAdapter extends BaseAdapter {

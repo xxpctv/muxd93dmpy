@@ -3,13 +3,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdk 33
 
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
     }
 
     buildTypes {
@@ -31,15 +29,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.github.tvbox.osc.player'
+    buildToolsVersion '33.0.2'
 }
 
 dependencies {
-    implementation "androidx.annotation:annotation:1.3.0"
+    implementation "androidx.annotation:annotation:1.6.0"
     api "com.google.android.exoplayer:exoplayer-core:2.14.2"
     api "com.google.android.exoplayer:exoplayer-dash:2.14.2"
     api "com.google.android.exoplayer:exoplayer-hls:2.14.2"
     api "com.google.android.exoplayer:exoplayer-rtsp:2.14.2"
     api "com.google.android.exoplayer:extension-rtmp:2.14.2"
     api "com.google.android.exoplayer:extension-okhttp:2.14.2"
-    api 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.5'
+    api 'xyz.doikki.android.dkplayer:dkplayer-ui:3.3.7'
 }

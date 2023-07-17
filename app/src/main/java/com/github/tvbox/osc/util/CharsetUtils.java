@@ -1,10 +1,10 @@
 package com.github.tvbox.osc.util;
 
+import org.mozilla.universalchardet.UniversalDetector;
+
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.mozilla.universalchardet.UniversalDetector;
 
 /**
  * 字符集工具类，提供了检测字符集的工具方法
