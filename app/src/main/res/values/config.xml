@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_epg_url" value="https://epg.112114.xyz/" />
+
+    <string-array name="default_api_history">
+        <item>https://www.bestpvp.site/关注码上放生/时光机</item>
+        <item>http://52bsj.vip:98/wuai</item>
+        <item>http://52bsj.vip:81/api/v3/file/get/67776/1.json?sign=Suz6jqs5w4g4FFTohPyWDC82QQdpOkbs8UN4OR9QJsI%3D%3A0</item>
+        <item>https://agit.ai/butterfly/001box/raw/branch/md/dc92.json</item>
+        <item>https://agit.ai/hu/hcr/raw/branch/master/1012.txt</item>
+        <item>https://agit.ai/hu/hcr/raw/branch/master/99668.txt</item>
+        <item>https://agit.ai/n/b/raw/branch/a/b/c.json</item>
+        <item>https://agit.ai/xiaohu/tvbox/raw/branch/main/dc1</item>
+        <item>https://agit.ai/xiaohu/tvbox/raw/branch/main/dc2</item>
+        <item>https://agit.ai/xiaohu/tvbox/raw/branch/main/dc3</item>
+        <item>https://agit.ai/xiaohu/tvbox/raw/branch/main/dc4</item>
+        <item>https://jihulab.com/clear1/yingmi/-/raw/main/xh.txt</item>
+        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/1.json</item>
+        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/2.json</item>
+        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/3.json</item>
+        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/4.json</item>
+        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/dc.json</item>
+        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/dc2.json</item>
+    </string-array>
+</resources>
