@@ -11,8 +11,12 @@ import com.github.tvbox.osc.util.MD5;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.misc.ITrackInfo;
@@ -96,7 +100,21 @@ public class IjkMediaPlayer extends IjkPlayer {
         }
         setDataSourceHeader(headers);
         mMediaPlayer.setOption(tv.danmaku.ijk.media.player.IjkMediaPlayer.OPT_CATEGORY_FORMAT, "protocol_whitelist", "ijkio,ffio,async,cache,crypto,file,dash,http,https,ijkhttphook,ijkinject,ijklivehook,ijklongurl,ijksegment,ijktcphook,pipe,rtp,tcp,tls,udp,ijkurlhook,data");
+//        try {
+//            path = encodeSpaceChinese(path);
+//        } catch (Exception ignored) {
+//            ignored.printStackTrace();
+//        }
         super.setDataSource(path, null);
+    }
+
+    private String encodeSpaceChinese(String str) throws UnsupportedEncodingException {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5 ]+");
+        Matcher m = p.matcher(str);
+        StringBuffer b = new StringBuffer();
+        while (m.find()) m.appendReplacement(b, URLEncoder.encode(m.group(0), "UTF-8"));
+        m.appendTail(b);
+        return b.toString();
     }
 
     private void setDataSourceHeader(Map<String, String> headers) {

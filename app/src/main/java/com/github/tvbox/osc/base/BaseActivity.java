@@ -196,13 +196,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
                 int picWidth = 1080;
                 int scaleX = imageWidth / picWidth;
                 int scaleY = imageHeight / picHeight;
-                int scale = 1;
-                if (scaleX > scaleY && scaleY >= 1) {
-                    scale = scaleX;
-                }
-                if (scaleX < scaleY && scaleX >= 1) {
-                    scale = scaleY;
-                }
+                int scale = Math.max(Math.max(scaleX, scaleY), 1);
                 opts.inJustDecodeBounds = false;
                 // 采样率
                 opts.inSampleSize = scale;
@@ -214,9 +208,10 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
             throwable.printStackTrace();
             globalWp = null;
         }
-        if (globalWp != null)
+        if (globalWp != null) {
             getWindow().setBackgroundDrawable(globalWp);
-        else
+        } else {
             getWindow().setBackgroundDrawableResource(R.drawable.app_bg);
+        }
     }
 }
