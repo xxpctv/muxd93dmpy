@@ -6,7 +6,7 @@
     // Home Page //
     <string name="hm_ok">加载成功</string>
     <string name="hm_notok">加载失败</string>
-    <string name="hm_retry">重试</string>
+    <string name="hm_retry">重试，或检查是否多仓</string>
     <string name="hm_cancel">取消</string>
     <string name="hm_exit">再按一次返回键退出应用</string>
     <string name="hm_exit_live">再按一次返回键退出直播</string>

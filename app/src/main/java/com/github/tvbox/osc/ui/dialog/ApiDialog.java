@@ -101,6 +101,33 @@ public class ApiDialog extends BaseDialog {
                 dialog.show();
             }
         });
+        ArrayList<String> multi_api_list = Hawk.get(HawkConfig.MULTI_API_LIST, new ArrayList<String>());
+        if (!multi_api_list.isEmpty()) {
+            findViewById(R.id.multiAPIList).setVisibility(View.VISIBLE);
+            findViewById(R.id.multiAPIList).setOnClickListener(v -> {
+
+                String current = Hawk.get(HawkConfig.API_URL, "");
+                int idx = 0;
+                if (multi_api_list.contains(current))
+                    idx = multi_api_list.indexOf(current);
+                MultiAPIDialog dialog = new MultiAPIDialog(getContext());
+                dialog.setTip("多仓选择列表");
+                dialog.setAdapter(new ApiHistoryDialogAdapter.SelectDialogInterface() {
+                    @Override
+                    public void click(String value) {
+                        inputApi.setText(value);
+                        listener.onchange(value);
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void del(String value, ArrayList<String> data) {
+                        Hawk.put(HawkConfig.API_HISTORY, data);
+                    }
+                }, multi_api_list, idx);
+                dialog.show();
+            });
+        }
         findViewById(R.id.storagePermission).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

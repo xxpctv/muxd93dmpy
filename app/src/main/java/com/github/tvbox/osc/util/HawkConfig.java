@@ -18,6 +18,8 @@ public class HawkConfig {
     public static final String EPG_URL = "epg_url";
     public static final String SHOW_PREVIEW = "show_preview";
     public static final String API_HISTORY = "api_history";
+
+    public static final String MULTI_API_LIST = "multi-api_list";
     public static final String EPG_HISTORY = "epg_history";
 
     // Settings

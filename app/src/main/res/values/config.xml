@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="default_epg_url" translatable="false">"https://epg.112114.xyz/" </string>/>
-    <string name="app_source" translatable="false">https://jihulab.com/clear1/yingmi/-/raw/main/xh.txt</string>
+    <string name="app_source" translatable="false">https://www.bestpvp.site/关注码上放生/时光机</string>
 
     <string-array name="default_api_history" translatable="false">
         <item>https://www.bestpvp.site/关注码上放生/时光机</item>
-        <item>https://gitee.com/xisohi/xhysyuan/raw/master/XC.json</item>
         <item>http://52bsj.vip:98/wuai</item>
+        <item>https://cdn.jsdelivr.net/gh/2hacc/TVBox@main/tvbox.json</item>
+        <item>https://cdn.jsdelivr.net/gh/2hacc/TVBox@main/drpy/xiaoya.json</item>
+        <item>https://ghproxy.com/https://raw.githubusercontent.com/xianyuyimu/TVBOX-/main/TVBox/%E4%B8%80%E6%9C%A8%E5%A4%9A%E7%BA%BF%E8%B7%AF.json</item>
+        <item>https://ghproxy.com/https://raw.githubusercontent.com/mengzehe/tvbox/main/自用源</item>
+        <item>https://ghproxy.com/https://raw.githubusercontent.com/hl128k/tvbox/main/tv/0/cloudplains_tvbox.json</item>
+        <item>https://jihulab.com/yw88075/tvbox/-/raw/main/dr/js.json</item>
+        <item>https://ghproxy.com/https://raw.githubusercontent.com/mengzehe/tvbox/main/%E8%87%AA%E7%94%A8%E5%8D%95%E4%BB%93</item>
+        <item>https://gitee.com/xisohi/xhysyuan/raw/master/XC.json</item>
+        <item>https://agit.ai/Yoursmile7/TVBox/raw/branch/master/XC.json</item>
+        <item>https://agit.ai/CloudMist/TVBox/raw/branch/master/item/lib/mary.json</item>
         <item>http://52bsj.vip:81/api/v3/file/get/67776/1.json?sign=Suz6jqs5w4g4FFTohPyWDC82QQdpOkbs8UN4OR9QJsI%3D%3A0</item>
-        <item>https://agit.ai/butterfly/001box/raw/branch/md/dc92.json</item>
-        <item>https://agit.ai/hu/hcr/raw/branch/master/1012.txt</item>
-        <item>https://agit.ai/hu/hcr/raw/branch/master/99668.txt</item>
-        <item>https://agit.ai/n/b/raw/branch/a/b/c.json</item>
+        <item>https://agit.ai/ljc6666/TVBox/raw/branch/master/001.json</item>
         <item>https://agit.ai/xiaohu/tvbox/raw/branch/main/dc1</item>
-        <item>https://agit.ai/xiaohu/tvbox/raw/branch/main/dc2</item>
-        <item>https://agit.ai/xiaohu/tvbox/raw/branch/main/dc3</item>
-        <item>https://agit.ai/xiaohu/tvbox/raw/branch/main/dc4</item>
         <item>https://jihulab.com/clear1/yingmi/-/raw/main/xh.txt</item>
-        <item>https://jihulab.com/ygbh1/box/-/raw/main/%E6%9C%88%E5%85%89%E5%AE%9D.json</item>
-        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/2.json</item>
-        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/3.json</item>
-        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/4.json</item>
-        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/dc.json</item>
-        <item>https://jihulab.com/ygbh1/box/-/raw/main/dcang/dc2.json</item>
+        <item>https://jihulab.com/ygbh1/box/-/blob/f2e22879d4bdd3757c078820616ea4f9b57679a6/%E6%9C%88%E5%85%89%E5%AE%9D.json</item>
+        <item>https://cdn.staticaly.com/gh/2hacc/TVBox/main/h/h.json</item>
+        <item>https://agit.ai/butterfly/001box/raw/branch/md/dc92.json</item>
     </string-array>
     <string-array name="default_ad_block" translatable="false">
         <item>"wan.51img1.com"</item>

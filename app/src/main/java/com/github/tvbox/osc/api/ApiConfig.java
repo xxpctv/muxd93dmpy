@@ -306,10 +306,27 @@ public class ApiConfig {
 
     private void parseJson(String apiUrl, String jsonStr) {
         JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);
+
+//        Hawk.delete(HawkConfig.MULTI_API_LIST);
+        if(infoJson.has("urls")){
+            JsonArray parses = infoJson.get("urls").getAsJsonArray();
+            ArrayList<String> multi_api_list = Hawk.get(HawkConfig.MULTI_API_LIST, new ArrayList<String>());
+            for (JsonElement opt : parses) {
+                JsonObject obj = (JsonObject) opt;
+                String urls = obj.get("url").getAsString().trim();
+                if (!multi_api_list.contains(urls))
+                    multi_api_list.add(0, urls);
+                if (multi_api_list.size() > 30)
+                    multi_api_list.remove(30);
+            }
+            Hawk.put(HawkConfig.MULTI_API_LIST,multi_api_list);
+        }
+
         // spider
         spider = DefaultConfig.safeJsonString(infoJson, "spider", "");
         // wallpaper
         wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
+
         // 远端站点源
         SourceBean firstSite = null;
         for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
