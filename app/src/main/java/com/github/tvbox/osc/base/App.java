@@ -94,7 +94,7 @@ public class App extends MultiDexApplication {
 //        String[] history = getResources().getStringArray(R.array.default_api_history);
         ArrayList<String> api_history = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.default_api_history)));
         putDefault(HawkConfig.API_HISTORY, api_history);  // 接口历史记录
-        putDefault(HawkConfig.API_URL, "https://jihulab.com/clear1/yingmi/-/raw/main/xh.txt");  // 接口历史记录
+        putDefault(HawkConfig.API_URL, getString(R.string.app_source));  // 接口历史记录
         putDefault(HawkConfig.EPG_URL, "https://epg.112114.xyz/");  // 接口历史记录
 
     }

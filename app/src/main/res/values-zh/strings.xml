@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">TVBox</string>
     <string name="app_home">首页</string>
-    <string name="app_source"></string>
 
     // Home Page //
     <string name="hm_ok">加载成功</string>

@@ -2,8 +2,12 @@ package com.github.tvbox.osc.util;
 
 import android.webkit.WebResourceResponse;
 
+import com.github.tvbox.osc.R;
+import com.github.tvbox.osc.ui.activity.HomeActivity;
+
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AdBlocker {
@@ -35,6 +39,11 @@ public class AdBlocker {
         return false;
     }
 
+    public static void dumpADHosts() {
+        for (String adHost : AD_HOSTS) {
+            System.out.println("TVBox AD_HOSTS: "+adHost);
+        }
+    }
     public static WebResourceResponse createEmptyResource() {
         return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream("".getBytes()));
     }
