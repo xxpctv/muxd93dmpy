@@ -29,9 +29,14 @@ android {
 
 
     buildTypes {
+        all {
+            resValue "string", "mn_Version", "XD_1.0.".concat(buildTime())
+        }
         debug {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled false
+
+            buildConfigField("boolean", "LOG_DEBUG", "true")
 
             ndk {
                 abiFilters 'armeabi-v7a'
@@ -39,7 +44,9 @@ android {
         }
         release {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            minifyEnabled true
+            minifyEnabled false
+
+            buildConfigField("boolean", "LOG_DEBUG", "true")
 
             ndk {
                 abiFilters 'armeabi-v7a'

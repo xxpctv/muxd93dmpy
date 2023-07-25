@@ -1,5 +1,6 @@
 package com.github.tvbox.osc.util;
 
+import android.util.Log;
 import android.webkit.WebResourceResponse;
 
 import java.io.ByteArrayInputStream;
@@ -37,7 +38,7 @@ public class AdBlocker {
 
     public static void dumpADHosts() {
         for (String adHost : AD_HOSTS) {
-            System.out.println("TVBox AD_HOSTS: "+adHost);
+            Log.d("TVBox", "AD_HOSTS: " + adHost);
         }
     }
     public static WebResourceResponse createEmptyResource() {

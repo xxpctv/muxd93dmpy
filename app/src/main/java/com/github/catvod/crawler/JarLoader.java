@@ -3,6 +3,7 @@ package com.github.catvod.crawler;
 import android.content.Context;
 
 import com.github.tvbox.osc.base.App;
+import com.github.tvbox.osc.util.LogUtil;
 import com.github.tvbox.osc.util.MD5;
 import com.lzy.okgo.OkGo;
 
@@ -55,7 +56,7 @@ public class JarLoader {
                     if (classInit != null) {
                         Method method = classInit.getMethod("init", Context.class);
                         method.invoke(null, App.getInstance());
-                        System.out.println("自定义爬虫代码加载成功!");
+                        LogUtil.d("自定义爬虫代码加载成功!");
                         success = true;
                         try {
                             Class proxy = classLoader.loadClass("com.github.catvod.spider.Proxy");

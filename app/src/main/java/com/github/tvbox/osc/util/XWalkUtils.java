@@ -147,7 +147,7 @@ public class XWalkUtils {
                     bos.flush();
                     bos.close();
                     if (new File(tempFile).renameTo(new File(finalApk))) {
-                        LOG.i(finalApk);
+                        LogUtil.i(finalApk);
                     }
                 }
             }

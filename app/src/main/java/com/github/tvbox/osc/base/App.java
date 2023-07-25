@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import androidx.multidex.MultiDexApplication;
 
+import com.github.tvbox.osc.BuildConfig;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.callback.EmptyCallback;
@@ -14,7 +15,7 @@ import com.github.tvbox.osc.util.AppManager;
 import com.github.tvbox.osc.util.EpgUtil;
 import com.github.tvbox.osc.util.FileUtils;
 import com.github.tvbox.osc.util.HawkConfig;
-import com.github.tvbox.osc.util.LOG;
+import com.github.tvbox.osc.util.LogUtil;
 import com.github.tvbox.osc.util.LocaleHelper;
 import com.github.tvbox.osc.util.OkGoHelper;
 import com.github.tvbox.osc.util.PlayerHelper;
@@ -81,7 +82,7 @@ public class App extends MultiDexApplication {
         putDefault(HawkConfig.HOME_REC, 1);       // Home Rec 0=豆瓣, 1=推荐, 2=历史
         putDefault(HawkConfig.HOME_SHOW_SOURCE, true);         //首页显示数据源  true=显示，false=不显示
         putDefault(HawkConfig.HOME_REC_STYLE, true);    // 首页多行 true=多行，false=单行
-        putDefault(HawkConfig.PLAY_TYPE, 2);      // Player   0=系统, 1=IJK, 2=Exo
+        putDefault(HawkConfig.PLAY_TYPE, 1);      // Player   0=系统, 1=IJK, 2=Exo
         putDefault(HawkConfig.IJK_CODEC, "硬解码");// IJK Render 软解码, 硬解码
         putDefault(HawkConfig.HOME_SEARCH_POSITION, false);      //主页搜索按钮位置 false=下方 ,true=上方
 		putDefault(HawkConfig.HOME_MENU_POSITION, true);     	 //主页菜单按钮位置 false=下方 ,true=上方
@@ -96,6 +97,7 @@ public class App extends MultiDexApplication {
         putDefault(HawkConfig.API_HISTORY, api_history);  // 接口历史记录
         putDefault(HawkConfig.API_URL, getString(R.string.app_source));  // 接口历史记录
         putDefault(HawkConfig.EPG_URL, "https://epg.112114.xyz/");  // 接口历史记录
+        putDefault(HawkConfig.IJK_CACHE_PLAY, true);  // IJK缓存
 
     }
 
@@ -134,7 +136,8 @@ public class App extends MultiDexApplication {
             }
             return p;
         } catch (Exception e) {
-            LOG.e(e.toString());
+            LogUtil.e("getp2p error");
+            e.printStackTrace();
             return null;
         }
     }

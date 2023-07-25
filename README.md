@@ -1,15 +1,13 @@
-# TVBoxOSC
-https://github.com/o0HalfLife0o/TVBoxOSC/releases
+# TVBoxXD
 
-![Build](https://shields.io/github/actions/workflow/status/muxd93/TVBoxOS_XD/self_build.yml?branch=master&logo=github&label=Build)
-[![Download](https://img.shields.io/github/v/release/muxd93/TVBoxOS_XD?color=blue&logoColor=blue&label=Download&logo=DocuSign)](https://github.com/muxd93/TVBoxOS_XD/releases)
+[![AutoBuildTest](https://github.com/muxd93/TVBoxOS_XD/actions/workflows/auto_build.yml/badge.svg)](https://github.com/muxd93/TVBoxOS_XD/actions/workflows/auto_build.yml)
+[![Download](https://img.shields.io/github/v/release/muxd93/TVBoxOS_XD?color=green&logoColor=green&label=Download&logo=DocuSign)](https://github.com/muxd93/TVBoxOS_XD/releases)
 
 ## Credits
 This repo relies on the following third-party projects:
 - [CatVodTVOfficial/TVBoxOSC](https://github.com/CatVodTVOfficial/TVBoxOSC)
 - [o0HalfLife0o/TVBoxOSC](https://github.com/o0HalfLife0o/TVBoxOSC/releases)
-- [q215613905/TVBoxOS](https://github.com/q215613905/TVBoxOS) (Updated: 5775c0e7308abfa243a53f9d0a50f31fd3a5cfb9)
-- [takagen99/Box](https://github.com/takagen99/Box) (Updated: 33c30107eeb9ec57c4df060c0bc1401769ae088c)
-- [FongMi/TV](https://github.com/FongMi/TV) (Updated: 33c30107eeb9ec57c4df060c0bc1401769ae088c)
-
-
+- [q215613905/TVBoxOS](https://github.com/q215613905/TVBoxOS) (Updated: 719776017ea687ef1770d1fc1b59e859598523bd)
+- [takagen99/Box](https://github.com/takagen99/Box) (Updated: eea34de0b353943eb1a1e2b2bb559e481ac6e70f)
+- [FongMi/TV](https://github.com/FongMi/TV) (Updated: 27a40fb7ed5068f03d0b60e866dbc59c6bddeb1e)
+- [muxd93/TVBoxOS_XD](https://github.com/muxd93/TVBoxOS_XD) (Updated: 744af6ec8491fe86f9ed83f2d6dfbf78080991de)
