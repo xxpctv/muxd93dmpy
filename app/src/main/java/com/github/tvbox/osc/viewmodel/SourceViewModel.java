@@ -19,7 +19,7 @@ import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.HawkConfig;
-import com.github.tvbox.osc.util.LOG;
+import com.github.tvbox.osc.util.LogUtil;
 import com.github.tvbox.osc.util.thunder.Thunder;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -287,9 +287,9 @@ public class SourceViewModel extends ViewModel {
             String ext="";
             if (sortData.filterSelect != null && sortData.filterSelect.size() > 0) {
                 try {
-                    LOG.i(new JSONObject(sortData.filterSelect).toString());
+                    LogUtil.i(new JSONObject(sortData.filterSelect).toString());
                     ext = Base64.encodeToString(new JSONObject(sortData.filterSelect).toString().getBytes("UTF-8"), Base64.DEFAULT |  Base64.NO_WRAP);
-                    LOG.i(ext);
+                    LogUtil.i(ext);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -314,7 +314,7 @@ public class SourceViewModel extends ViewModel {
                     @Override
                     public void onSuccess(Response<String> response) {
                         String json = response.body();
-                        LOG.i(json);
+                        LogUtil.i(json);
                         json(listResult, json, homeSourceBean.getKey());
                     }
 
@@ -459,7 +459,7 @@ public class SourceViewModel extends ViewModel {
                                 xml(detailResult, xml, sourceBean.getKey());
                             } else {
                                 String json = response.body();
-                                LOG.i(json);
+                                LogUtil.i(json);
                                 json(detailResult, json, sourceBean.getKey());
                             }
                         }
@@ -481,13 +481,14 @@ public class SourceViewModel extends ViewModel {
         if (type == 3) {
             try {
                 Spider sp = ApiConfig.get().getCSP(sourceBean);
-                String search = sp.searchContent(wd, false);
+                String search = sp != null ? sp.searchContent(wd, false):"";
                 if(!TextUtils.isEmpty(search)){
                     json(searchResult, search, sourceBean.getKey());
                 } else {
                     json(searchResult, "", sourceBean.getKey());
                 }
             } catch (Throwable th) {
+                LogUtil.e("getSearchResult error.");
                 th.printStackTrace();
                 json(searchResult, "", sourceBean.getKey());
             }
@@ -543,7 +544,7 @@ public class SourceViewModel extends ViewModel {
                     @Override
                     public void onSuccess(Response<String> response) {
                             String json = response.body();
-                        LOG.i(json);
+                        LogUtil.i(json);
                             json(searchResult, json, sourceBean.getKey());
                     }
 
@@ -621,7 +622,7 @@ public class SourceViewModel extends ViewModel {
                     @Override
                     public void onSuccess(Response<String> response) {
                         String json = response.body();
-                        LOG.i(json);
+                        LogUtil.i(json);
                         json(quickSearchResult, json, sourceBean.getKey());
                     }
 
@@ -699,7 +700,7 @@ public class SourceViewModel extends ViewModel {
                     @Override
                     public void onSuccess(Response<String> response) {
                         String json = response.body();
-                        LOG.i(json);
+                        LogUtil.i(json);
                         try {
                             JSONObject result = new JSONObject(json);
                             result.put("key", url);
@@ -849,7 +850,7 @@ public class SourceViewModel extends ViewModel {
                         @Override
                         public void status(int code, String info) {
                             if (code >= 0) {
-                                LOG.i(info);
+                                LogUtil.i(info);
                             } else {
                                 urlInfo.beanList.get(0).name = info;
                                 detailResult.postValue(data);
@@ -891,7 +892,7 @@ public class SourceViewModel extends ViewModel {
                         @Override
                         public void status(int code, String info) {
                             if (code >= 0) {
-                                LOG.i(info);
+                                LogUtil.i(info);
                             } else {
                                 urlInfo.beanList.get(0).name = info;
                                 detailResult.postValue(data);

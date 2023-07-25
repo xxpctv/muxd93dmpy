@@ -93,7 +93,7 @@ public class IpScanning {
             }
             if (status) {
                 IpScanningVo ipScanning = new IpScanningVo(addip.getHostName(), ip);
-                LOG.i("IP地址为:" + ip + "\t\t设备名称为: " + addip.getHostName() + "\t\t是否可用: " + (status ? "可用" : "不可用"));
+                LogUtil.i("IP地址为:" + ip + "\t\t设备名称为: " + addip.getHostName() + "\t\t是否可用: " + (status ? "可用" : "不可用"));
                 array.add(ipScanning);
             }
         }

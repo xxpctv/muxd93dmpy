@@ -80,7 +80,7 @@ public class VideoParseRuler {
                             checkIsVideo = false;
                             break;
                         }
-                        LOG.i("VIDEO RULE:" + hostRules.get(i).get(j));
+                        LogUtil.i("VIDEO RULE:" + hostRules.get(i).get(j));
                     }
                 } else {
                     checkIsVideo = false;
@@ -127,7 +127,7 @@ public class VideoParseRuler {
                             checkIsFilter = false;
                             break;
                         }
-                        LOG.i("FILTER RULE:" + hostFilters.get(i).get(j));
+                        LogUtil.i("FILTER RULE:" + hostFilters.get(i).get(j));
                     }
                 } else {
                     checkIsFilter = false;

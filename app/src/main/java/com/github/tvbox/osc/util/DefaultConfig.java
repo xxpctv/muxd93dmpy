@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.bean.MovieSort;
@@ -32,7 +33,9 @@ public class DefaultConfig {
             ArrayList<String> categories = sb.getCategories();
             if (!categories.isEmpty()) {
                 for (String cate : categories) {
+                    LogUtil.v("categories不为空: " + cate);
                     for (MovieSort.SortData sortData : list) {
+                        LogUtil.v(sortData.toString());
                         if (sortData.name.equals(cate)) {
                             if (sortData.filters == null)
                                 sortData.filters = new ArrayList<>();
@@ -42,6 +45,7 @@ public class DefaultConfig {
                 }
             } else {
                 for (MovieSort.SortData sortData : list) {
+                    LogUtil.v("categories为空: " + sortData.toString());
                     if (sortData.filters == null)
                         sortData.filters = new ArrayList<>();
                     data.add(sortData);

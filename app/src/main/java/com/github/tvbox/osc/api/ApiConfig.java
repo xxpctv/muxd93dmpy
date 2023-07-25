@@ -21,6 +21,7 @@ import com.github.tvbox.osc.util.AES;
 import com.github.tvbox.osc.util.AdBlocker;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.HawkConfig;
+import com.github.tvbox.osc.util.LogUtil;
 import com.github.tvbox.osc.util.MD5;
 import com.github.tvbox.osc.util.VideoParseRuler;
 import com.google.gson.Gson;
@@ -162,7 +163,7 @@ public class ApiConfig {
         } else {
             configUrl = apiUrl;
         }
-        System.out.println("API URL :" + configUrl);
+        LogUtil.d("API URL :" + configUrl);
         String configKey = TempKey;
         OkGo.<String>get(configUrl)
                 .headers("User-Agent", userAgent)
@@ -293,7 +294,7 @@ public class ApiConfig {
     }
 
     private void parseJson(String apiUrl, File f) throws Throwable {
-        System.out.println("从本地缓存加载" + f.getAbsolutePath());
+        LogUtil.d("从本地缓存加载" + f.getAbsolutePath());
         BufferedReader bReader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"));
         StringBuilder sb = new StringBuilder();
         String s = "";
@@ -415,14 +416,14 @@ public class ApiConfig {
                     }else {
                         extUrlFix = new String(Base64.decode(extUrl, Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP), "UTF-8");
                     }
-//                    System.out.println("extUrlFix :"+extUrlFix);
+                    LogUtil.d("extUrlFix :"+extUrlFix);
                     if (extUrlFix.startsWith("clan://")) {
                         extUrlFix = clanContentFix(clanToAddress(apiUrl), extUrlFix);
                     }
                     extUrlFix = Base64.encodeToString(extUrlFix.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
                     url = url.replace(extUrl, extUrlFix);
                 }
-//                System.out.println("urlLive :"+url);
+                LogUtil.d("urlLive :"+url);
 
                 //设置epg
                 if(livesOBJ.has("epg")){

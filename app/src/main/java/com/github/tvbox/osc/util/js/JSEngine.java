@@ -8,6 +8,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.github.tvbox.osc.base.App;
+import com.github.tvbox.osc.util.LogUtil;
 import com.github.tvbox.osc.util.OkGoHelper;
 import com.github.tvbox.quickjs.JSArray;
 import com.github.tvbox.quickjs.JSCallFunction;
@@ -161,7 +162,7 @@ public class JSEngine {
                     for (Object o : args) {
                         b.append(o == null ? "null" : o.toString());
                     }
-                    System.out.println(TAG + " >>> " + b.toString());
+                    LogUtil.d(TAG + " >>> " + b.toString());
                     return null;
                 }
             });

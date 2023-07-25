@@ -49,7 +49,7 @@ import com.github.tvbox.osc.ui.tv.widget.ViewObj;
 import com.github.tvbox.osc.util.AppManager;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.HawkConfig;
-import com.github.tvbox.osc.util.LOG;
+import com.github.tvbox.osc.util.LogUtil;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
@@ -246,14 +246,20 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initViewModel() {
+        LogUtil.d("initViewModel start");
         sourceViewModel = new ViewModelProvider(this).get(SourceViewModel.class);
         sourceViewModel.sortResult.observe(this, new Observer<AbsSortXml>() {
             @Override
             public void onChanged(AbsSortXml absXml) {
+                LogUtil.d("initViewModel onChanged absXml: "+absXml+", absXml.classes: "+absXml.classes +", absXml.classes.sortList： "+absXml.classes.sortList);
                 showSuccess();
                 if (absXml != null && absXml.classes != null && absXml.classes.sortList != null) {
+                    LogUtil.i(absXml.classes.toString());
+                    LogUtil.i(absXml.classes.sortList.toString());
+                    LogUtil.i(absXml.list.toString());
                     sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), absXml.classes.sortList, true));
                 } else {
+                    LogUtil.i("no absXml.classes.sortList");
                     sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), new ArrayList<>(), true));
                 }
                 initViewPager(absXml);
@@ -284,13 +290,15 @@ public class HomeActivity extends BaseActivity {
                 tvName.setText(home.getName());
         }
 
+        LogUtil.d("initData dataInitOk: "+dataInitOk+", jarInitOk: "+jarInitOk);
+
         if (dataInitOk && jarInitOk) {
             showLoading();
             sourceViewModel.getSort(ApiConfig.get().getHomeSourceBean().getKey());
             if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                LOG.e("有");
+                LogUtil.v("有WRITE_EXTERNAL_STORAGE权限");
             } else {
-                LOG.e("无");
+                LogUtil.w("无WRITE_EXTERNAL_STORAGE权限");
             }
             return;
         }
@@ -445,6 +453,7 @@ public class HomeActivity extends BaseActivity {
                 field.set(mViewPager, scroller);
                 scroller.setmDuration(300);
             } catch (Exception e) {
+                e.printStackTrace();
             }
             mViewPager.setPageTransformer(true, new DefaultTransformer());
             mViewPager.setAdapter(pageAdapter);
