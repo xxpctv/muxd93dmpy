@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
 //    ndkPath = "D:\\Android\\NDK\\android-ndk-r23b\\"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 33
+        targetSdkVersion 34
         externalNativeBuild {
             cmake {
                 abiFilters 'armeabi-v7a'

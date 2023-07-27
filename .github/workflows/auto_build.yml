@@ -19,6 +19,9 @@ jobs:
           - userName: muxd93
             repoName: TVBoxOS_XD
             branchName: main
+          - userName: muxd93
+            repoName: TVBox_takagen99
+            branchName: main
           - userName: q215613905
             repoName: TVBoxOS
             branchName: main

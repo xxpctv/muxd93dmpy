@@ -251,12 +251,10 @@ public class HomeActivity extends BaseActivity {
         sourceViewModel.sortResult.observe(this, new Observer<AbsSortXml>() {
             @Override
             public void onChanged(AbsSortXml absXml) {
-                LogUtil.d("initViewModel onChanged absXml: "+absXml+", absXml.classes: "+absXml.classes +", absXml.classes.sortList： "+absXml.classes.sortList);
                 showSuccess();
                 if (absXml != null && absXml.classes != null && absXml.classes.sortList != null) {
-                    LogUtil.i(absXml.classes.toString());
-                    LogUtil.i(absXml.classes.sortList.toString());
-                    LogUtil.i(absXml.list.toString());
+                    LogUtil.d(absXml.classes.toString());
+                    LogUtil.d(absXml.classes.sortList.toString());
                     sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), absXml.classes.sortList, true));
                 } else {
                     LogUtil.i("no absXml.classes.sortList");
