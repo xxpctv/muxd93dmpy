@@ -1284,6 +1284,7 @@ public class PlayFragment extends BaseLazyFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        EventBus.getDefault().unregister(this);
         if(chatBroadcastWsClient != null){
             chatBroadcastWsClient.close();
             chatBroadcastWsClient = null;
@@ -1298,7 +1299,8 @@ public class PlayFragment extends BaseLazyFragment {
         }
         stopLoadWebView(true);
         stopParse();
-        Thunder.stop(true);
+        Thunder.stop(true);//停止磁力下载
+        Jianpian.finish();//停止p2p下载
     }
 
     private VodInfo mVodInfo;
@@ -1385,11 +1387,10 @@ public class PlayFragment extends BaseLazyFragment {
             CacheManager.delete(MD5.string2MD5(subtitleCacheKey), 0);
         }
 
-        if(vs.url.startsWith("tvbox-xg:") || (Thunder.isFtp(vs.url) && vs.url.contains("gbl.114s"))){//荐片地址特殊判断
+        if(Jianpian.isJpUrl(vs.url)){//荐片地址特殊判断
             String jp_url= vs.url;
             mController.showParse(false);
             if(vs.url.startsWith("tvbox-xg:")){
-                jp_url = jp_url.replace("tvbox-xg://","tvbox-xg:");
                 playUrl(Jianpian.JPUrlDec(jp_url.substring(9)), null);
             }else {
                 playUrl(Jianpian.JPUrlDec(jp_url), null);

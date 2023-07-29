@@ -966,4 +966,10 @@ public class VodController extends BaseController {
         }
         return false;
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mHandler.removeCallbacks(myRunnable2);
+    }
 }
