@@ -25,7 +25,7 @@ public class HawkConfig {
     // Settings
     public static final String DEBUG_OPEN = "debug_open";
     public static final String HOME_API = "home_api";
-    public static final String HOME_REC = "home_rec";                    // 0 豆瓣 1 推荐 2 历史
+    public static final String HOME_REC = "home_rec";                    // 0 豆瓣热播 1 数据源推荐 2 历史
     public static final String HOME_REC_STYLE = "home_rec_style";        // true=Grid, false=Line
     public static final String HOME_NUM = "home_num";                    // No. of History
     public static final String HOME_SHOW_SOURCE = "show_source";
@@ -51,6 +51,7 @@ public class HawkConfig {
     public static final String STORAGE_DRIVE_SORT = "storage_drive_sort";
 
     public static final String THEME_SELECT = "theme_select";
+    public static final String DANMU_SIZE = "danmu_size";
 
     // Live Settings
     public static final String LIVE_CHANNEL = "last_live_channel_name";

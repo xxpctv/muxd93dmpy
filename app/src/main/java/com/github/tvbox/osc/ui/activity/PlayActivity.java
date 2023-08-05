@@ -234,6 +234,11 @@ public class PlayActivity extends BaseActivity {
             }
 
             @Override
+            public void toggleDanmu() {
+
+            }
+
+            @Override
             public void prepared() {
                 initSubtitleView();
             }
@@ -1276,6 +1281,10 @@ public class PlayActivity extends BaseActivity {
                     mSysWebView.loadUrl("about:blank");
                     if (destroy) {
 //                        mSysWebView.clearCache(true);
+                        final ViewGroup viewGroup = (ViewGroup) mSysWebView.getParent();
+                        if (viewGroup != null) {
+                            viewGroup.removeView(mSysWebView);
+                        }
                         mSysWebView.removeAllViews();
                         mSysWebView.destroy();
                         mSysWebView = null;
