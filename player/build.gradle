@@ -35,6 +35,8 @@ android {
 
 dependencies {
     implementation "androidx.annotation:annotation:1.6.0"
+    compileOnly fileTree(dir: "libs", include: ["*.aar"])
+
     api "com.google.android.exoplayer:exoplayer-core:2.14.2"
     api "com.google.android.exoplayer:exoplayer-dash:2.14.2"
     api "com.google.android.exoplayer:exoplayer-hls:2.14.2"
