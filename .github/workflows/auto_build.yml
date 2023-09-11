@@ -28,8 +28,8 @@ jobs:
           - userName: takagen99
             repoName: Box
             branchName: main
-          - userName: FongMi
-            repoName: TV
+          - userName: Roinlong
+            repoName: TVbox_Mobile
             branchName: release
     steps:
       - name: Checkout
