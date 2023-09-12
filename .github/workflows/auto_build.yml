@@ -30,7 +30,7 @@ jobs:
             branchName: main
           - userName: Roinlong
             repoName: TVbox_Mobile
-            branchName: release
+            branchName: main
     steps:
       - name: Checkout
         uses: actions/checkout@v3

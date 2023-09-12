@@ -465,38 +465,6 @@ public class Thunder {
         }
     }
 
-    public static void startTask(Context context, String url, ThunderCallback callback){
-        init(context);
-        stop(true);
-        task_url= url;
-        LogUtil.d("checkThunder: "+task_url);
-        LogUtil.d("startTask:");
-        threadPool = Executors.newSingleThreadExecutor();
-        threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (isEd2k(task_url) || isFtp(task_url)) {
-                    LogUtil.d("task_url: "+task_url);
-                    if(TextUtils.isEmpty(task_url) || currentTask != 0L){
-                        return;
-                    }
-                    if(isNetworkDownloadTask(task_url)){
-                        name = XLTaskHelper.instance().getFileName(task_url);
-                        localPath = (new File(cacheRoot+File.separator+"temp",getFileNameWithoutExt(name)))+"/";
-                        currentTask = XLTaskHelper.instance().addThunderTask(task_url, localPath, null);
-                        callback.list(name+"$"+task_url);
-                        LogUtil.d("init name:"+name);
-                    } else {
-                        currentTask = 0L;
-                    }
-                    LogUtil.d("name: "+name);
-                    Log.d("TAG", "startTask(" +task_url + "), taskId = " + currentTask);
-                }
-            }
-        });
-    }
-
-
     public static void stopTask(){
         if(currentTask != 0L){
             XLTaskHelper.instance().deleteTask(currentTask, task_url.isEmpty()?cacheRoot:localPath);
