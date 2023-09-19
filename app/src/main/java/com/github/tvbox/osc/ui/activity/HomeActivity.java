@@ -19,6 +19,8 @@ import android.view.animation.BounceInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.ClipboardManager;
+import android.content.ClipData;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -79,6 +81,7 @@ public class HomeActivity extends BaseActivity {
     private LinearLayout contentLayout;
     private TextView tvDate;
     private TextView tvName;
+    private TextView tvtalk1;
     private TvRecyclerView mGridView;
     private NoScrollViewPager mViewPager;
     private SourceViewModel sourceViewModel;
@@ -293,6 +296,38 @@ public class HomeActivity extends BaseActivity {
 //    }
 
     private void initData() {
+//    首页增加每日一言      
+            String tvtalurl = ApiConfig.get().daily_sentence;            
+            UrlHttpUtil.get(tvtalurl, new CallBackUtil.CallBackString() {
+                   public void onFailure(int i, String str) {
+                        tvtalk1.setText(ApiConfig.get().daily_sentence);  
+                        }
+                   public void onResponse(String paramString) {
+                        Log.d("返回的EPG信息", paramString);
+                        try { 
+                            if (paramString.contains("hitokoto")) {
+                                JSONObject jsonObject = new JSONObject (paramString);
+                                String value = jsonObject.optString("hitokoto") + " — " +jsonObject.optString("from_who");
+                                tvtalk1.setText(value);
+                             } else {
+                                     tvtalk1.setText(ApiConfig.get().daily_sentence); 
+                                    }  
+                        }catch (Exception e) {
+                         e.printStackTrace();
+                       } 
+                   }    
+          }); 
+        
+       tvtalk1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //获取剪切板管理器
+                ClipboardManager cm = (ClipboardManager)getSystemService(mContext.CLIPBOARD_SERVICE);
+                //设置内容到剪切板
+                cm.setPrimaryClip(ClipData.newPlainText(null, tvtalk1.getText().toString().replace("新版地址点击复制 ","")));
+                Toast.makeText(HomeActivity.this, "已复制到剪切板！", Toast.LENGTH_SHORT).show();
+            }
+        });     
 
         // takagen99 : Switch to show / hide source title
         SourceBean home = ApiConfig.get().getHomeSourceBean();
